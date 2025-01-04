@@ -1,0 +1,153 @@
+body {
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #fff;
+}
+
+.header {
+  background-color: #243447;
+  height: 10vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  color: #FFFFFF;
+}
+
+.nav {
+  display: flex;
+  gap: 1rem;
+  opacity: 0.6;
+  gap: 2.5rem;
+}
+
+.nav a:hover {
+  color:#FFFFFF;
+  text-decoration:underline;
+}
+
+.i {
+  height: 50px;
+  width: auto;
+  margin-right: 15px;
+  border-radius:0.3rem;
+  
+}
+
+.Main {
+  height: 63.5vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 20px;
+  align-items: flex-start;
+  background-color: #fff;
+  padding: 2rem 1rem;
+  flex-wrap: wrap;
+}
+
+.heading{
+  height:20vh; 
+}
+.main-image{
+  height:60vh;
+  transform: scale(1.2);
+}
+
+.candidates,
+.company {
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 22rem;
+  background: linear-gradient(to right, #a1bddf, #2b6bba);
+  border-radius: 0.9rem;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.candidates:hover,.company:hover{
+  box-shadow: 0 0 20px rgba(26,31,54,0.8),0 0 30px rgba(26,31,54,0.6);
+}
+.cards-button {
+  display: flex;
+  justify-content: space-around;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.links {
+  background-color: transparent;
+  color: #2a2a2a;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s
+}
+
+.links:hover {
+  background-color: #1A1F36;
+  color: white;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+button:focus {
+  outline: none;
+}
+
+button {
+  display: inline-block;
+  background-color: #483331;
+  color: white;
+  padding: 0.5rem;
+  margin-top: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.footer {
+  color: #FFFFFF;
+  height: 6.5vh;
+  background-color: #1A1F36;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+@media (max-width:763px) {
+  .i {
+    height: 30px;
+  }
+
+  .Main {
+    height: auto;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .candidates,
+  .company {
+    width: 90%;
+    height: 40%;
+  }
+
+  .cards-button {
+    display: flex;
+    justify-content: space-evenly;
+    transform: scale(0.9);
+  }
+
+  .header {
+    flex-direction: column;
+  }
+  .main-image{
+    display: none;
+  }
+  .tagline{
+    font-size: xx-large;
+    padding-top: 1px;
+    padding-bottom: 1px;
+  }
+
+
+}
