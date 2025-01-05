@@ -12,7 +12,7 @@ function Header() {
   return (
     <Navbar  id="nav" fixed="top"  data-bs-theme="dark">
       <Container fluid>
-        <Navbar.Brand href="#">Jobpply</Navbar.Brand>
+        <Navbar.Brand href="#">JobApply</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav
