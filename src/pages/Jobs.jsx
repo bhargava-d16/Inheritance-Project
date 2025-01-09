@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Search, MapPin, Briefcase, DollarSign, ExternalLink } from 'lucide-react';
 
 const Jobs = () => {
   const [jobs] = useState([
@@ -28,16 +29,22 @@ const Jobs = () => {
     <div className="max-w-6xl mx-auto p-4">
       <div className="bg-white shadow rounded-lg p-6 mb-6">
         <div className="flex flex-col md:flex-row gap-4">
-          <input
-            type="text"
-            placeholder="Search jobs..."
-            className="flex-1 px-4 py-2 border rounded-lg"
-          />
-          <input
-            type="text"
-            placeholder="Location..."
-            className="flex-1 px-4 py-2 border rounded-lg"
-          />
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-3 text-gray-400" size={20} />
+            <input
+              type="text"
+              placeholder="Search jobs..."
+              className="w-full pl-10 pr-4 py-2 border rounded-lg"
+            />
+          </div>
+          <div className="relative flex-1">
+            <MapPin className="absolute left-3 top-3 text-gray-400" size={20} />
+            <input
+              type="text"
+              placeholder="Location..."
+              className="w-full pl-10 pr-4 py-2 border rounded-lg"
+            />
+          </div>
           <button className="bg-blue-600 text-white px-6 py-2 rounded-lg">
             Search
           </button>
@@ -53,14 +60,24 @@ const Jobs = () => {
                 <p className="text-gray-600 mt-1">{job.company}</p>
                 
                 <div className="flex flex-wrap gap-4 mt-4">
-                  <span className="text-gray-600">{job.location}</span>
-                  <span className="text-gray-600">{job.salary}</span>
-                  <span className="text-gray-600">{job.experience}</span>
+                  <div className="flex items-center gap-2">
+                    <MapPin size={16} className="text-gray-400" />
+                    <span>{job.location}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <DollarSign size={16} className="text-gray-400" />
+                    <span>{job.salary}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Briefcase size={16} className="text-gray-400" />
+                    <span>{job.experience}</span>
+                  </div>
                 </div>
               </div>
               
-              <button className="bg-blue-600 text-white px-4 py-2 rounded-lg">
+              <button className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg">
                 Apply Now
+                <ExternalLink size={16} />
               </button>
             </div>
           </div>
