@@ -1,13 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer base{
     body{
         background-color:white;
     }
 }
 .slick-slide>div{
-  margin:0 12px;
+  margin:0px;
 }
 .my-carouse.slick-dots li button{
     width:20px;
