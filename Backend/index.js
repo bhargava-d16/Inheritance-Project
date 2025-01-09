@@ -20,5 +20,5 @@ app.post('/login/jobseeker',loginValidation,loginJS)
 app.post('/signup/jobseeker',signupValidation,signupJS)
 
 app.listen(PORT,()=>{
-    console.log(`Server is working! on the port ${PORT}`)
+    console.log(`Server is working fine! on the port ${PORT}`)
 })
