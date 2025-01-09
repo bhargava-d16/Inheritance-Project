@@ -12,6 +12,7 @@ import SignupJs from './components/Pages/SignUp/SignupJs.jsx';
 import SignupE from './components/Pages/SignUp/SignupE.jsx';
 import Edashboard from './components/DashBoards/Edashboard.jsx';
 import JSdashboard from './components/DashBoards/JSdashboard.jsx';
+import Jobs from './pages/Jobs.jsx'
 
 
 const router = createBrowserRouter([
@@ -29,35 +30,57 @@ const router = createBrowserRouter([
       },
     ],
   },
+
   {
     path: '/login/jobseeker',
     element: <LoginJs />,
   },
+
   {
     path: '/login/employeer',
     element: <LoginE />,
   },
+
   {
     path: '/signup/jobseeker',
     element: <SignupJs />,
   },
+
   {
     path: '/signup/employeer',
     element: <SignupE />,
   },
+
   {
-    path:'/EDashboard',
-    element:<Edashboard></Edashboard>
+    path: '/EDashboard',
+    element: <Edashboard></Edashboard>
   },
+
   {
-    path:'/JSDashboard',
-    element:<JSdashboard></JSdashboard>
-  }
+    path: '/JSDashboard',
+    element: <JSdashboard></JSdashboard>
+  },
+
+
+  {
+    path: '/Jobs',
+    element: <Layout />,
+    children: [
+      {
+        path: '',
+        element: <Jobs />,
+      }
+      
+    ],
+  },
+
+
 ]);
 
 // Render the app
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <RouterProvider router={router} /> {/* Pass the router to RouterProvider */}
+
   </StrictMode>
 );
