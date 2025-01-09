@@ -65,7 +65,7 @@ const router = createBrowserRouter([
 
   {
 
-    path: '/user/jobs',
+    path: '/jobs',
     element: <Jobs />
   },
 
