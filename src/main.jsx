@@ -64,7 +64,6 @@ const router = createBrowserRouter([
 
 
   {
-
     path: '/user/jobs',
     element: <Jobs />
   },
@@ -83,7 +82,7 @@ const router = createBrowserRouter([
 // Render the app
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} /> {/* Pass the router to RouterProvider */}
+    <RouterProvider router={router} />
 
   </StrictMode>
 );
