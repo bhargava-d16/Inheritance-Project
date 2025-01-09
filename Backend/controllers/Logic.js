@@ -26,6 +26,7 @@ const loginJS = async (req, res) => {
     }
 
 }
+
 const signupJS = async (req, res) => {
     try {
         const { username, email, password } = await req.body;
