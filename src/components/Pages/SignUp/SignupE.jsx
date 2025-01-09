@@ -29,7 +29,7 @@ const SignupE = () => {
           email: '',
           password: ''
         })
-        navigate('/')
+        navigate('/EDashboard')
 
       }
     } catch (error) {

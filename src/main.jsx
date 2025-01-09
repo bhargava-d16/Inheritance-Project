@@ -10,6 +10,8 @@ import LoginJs from './components/Pages/Login/LoginJs.jsx';
 import LoginE from './components/Pages/Login/LoginE.jsx';
 import SignupJs from './components/Pages/SignUp/SignupJs.jsx';
 import SignupE from './components/Pages/SignUp/SignupE.jsx';
+import Edashboard from './components/DashBoards/Edashboard.jsx';
+import JSdashboard from './components/DashBoards/JSdashboard.jsx';
 
 
 const router = createBrowserRouter([
@@ -43,6 +45,14 @@ const router = createBrowserRouter([
     path: '/signup/employeer',
     element: <SignupE />,
   },
+  {
+    path:'/EDashboard',
+    element:<Edashboard></Edashboard>
+  },
+  {
+    path:'/JSDashboard',
+    element:<JSdashboard></JSdashboard>
+  }
 ]);
 
 // Render the app

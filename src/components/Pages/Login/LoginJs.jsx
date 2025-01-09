@@ -24,7 +24,7 @@ const LoginJs = () => {
           username:'',
           password:''
         })
-        navigate('/')
+        navigate('/JSDashboard')
 
       }
     } catch (error) {

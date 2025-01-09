@@ -26,7 +26,7 @@ const LoginE = () => {
           username: '',
           password: ''
         })
-        navigate('/')
+        navigate('/EDashboard')
 
       }
     } catch (error) {

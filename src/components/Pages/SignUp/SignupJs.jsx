@@ -27,7 +27,7 @@ const SignupJs = () => {
           email:'',
           password:''
         })
-        navigate('/')
+        navigate('/JSDashboard')
 
       }
     } catch (error) {
