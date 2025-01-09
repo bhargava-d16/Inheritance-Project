@@ -6,13 +6,13 @@ require("./models/db");
 const bodyParser=require('body-parser');
 const cors=require('cors');
 const { loginValidation, signupValidation } = require('./middlewares/Validation');
-const { loginJS, signupJS,loginE,signupE } = require('./controllers/Logic');
+const { loginJS, signupJS,loginE,signupE, sendJSdata } = require('./controllers/Logic');
 
 
 app.use(bodyParser.json());
 app.use(cors());
 
-
+app.get('/EDashboard',sendJSdata)
 
 app.post('/login/employeer',loginValidation,loginE)
 app.post('/signup/employeer',signupValidation,signupE)
