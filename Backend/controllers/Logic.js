@@ -88,9 +88,20 @@ const signupE = async (req, res) => {
         res.status(500).json({ msg: "Internal server issue", error })
     }
 }
+
+const em= [
+    { id: 1, companyName: 'Company 1', description: 'Tech company' },
+    { id: 2, companyName: 'Company 2', description: 'Design company' },
+
+  ];
+const sendJSdata=async(req,res)=>{
+    res.json(em);
+
+}
 module.exports = {
     loginJS,
     signupJS,
     loginE,
-    signupE
+    signupE,
+    sendJSdata
 }
