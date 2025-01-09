@@ -13,7 +13,7 @@ import SignupE from './components/Pages/SignUp/SignupE.jsx';
 import Edashboard from './components/DashBoards/Edashboard.jsx';
 import JSdashboard from './components/DashBoards/JSdashboard.jsx';
 import Jobs from './pages/Jobs.jsx'
-import userProfile from './pages/userProfile.jsx'
+import UserProfile from './pages/userProfile.jsx'
 
 
 const router = createBrowserRouter([
@@ -71,7 +71,7 @@ const router = createBrowserRouter([
 
   {
     path: '/user/profile',
-    element: <userProfile />
+    element: <UserProfile />
 
   }
 
