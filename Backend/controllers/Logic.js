@@ -1,23 +1,25 @@
-const {UserModel} = require("../models/user");
+const { UserModel } = require("../models/user");
+const { EModel } = require("../models/user")
+const { UserProfile } = require("../models/userprofile")
 const bcrypt = require('bcrypt');
-const jwt=require('jsonwebtoken');
-const {EModel}=require("../models/user") 
+const jwt = require('jsonwebtoken');
+
 
 
 const loginJS = async (req, res) => {
     try {
-        const { username,password } = await req.body;
-        const u = await UserModel.findOne({ username});
+        const { username, password } = await req.body;
+        const u = await UserModel.findOne({ username });
         if (!u) {
             return res.status(403).json({ msg: "Invalid Credentials Or User Does't Exist", success: false })
         }
-        const x=await bcrypt.compare(password,u.password)
-        if(x){
-            const jwtToken=jwt.sign({username:u.username,_id:u._id},
+        const x = await bcrypt.compare(password, u.password)
+        if (x) {
+            const jwtToken = jwt.sign({ username: u.username, _id: u._id },
                 process.env.JWT_SECRET,
-                {expiresIn:'24h'}
+                { expiresIn: '24h' }
             )
-            res.status(201).json({ msg: "Login Success!", success: true,jwtToken,username });
+            res.status(201).json({ msg: "Login Success!", success: true, jwtToken, username });
             // Creating jwt token
         }
         else res.status(403).json({ msg: "Invalid Credentials", success: false })
@@ -30,7 +32,7 @@ const loginJS = async (req, res) => {
 const signupJS = async (req, res) => {
     try {
         const { username, email, password } = await req.body;
-        const u = await UserModel.findOne({ username});
+        const u = await UserModel.findOne({ username });
         if (u) {
             return res.status(409).json({ msg: "User Exist", success: false })
         }
@@ -50,18 +52,18 @@ const signupJS = async (req, res) => {
 
 const loginE = async (req, res) => {
     try {
-        const { username,password } = await req.body;
-        const u = await EModel.findOne({ username});
+        const { username, password } = await req.body;
+        const u = await EModel.findOne({ username });
         if (!u) {
             return res.status(403).json({ msg: "Invalid Credentials Or User Does't Exist", success: false })
         }
-        const x=await bcrypt.compare(password,u.password)
-        if(x){
-            const jwtToken=jwt.sign({username:u.username,_id:u._id},
+        const x = await bcrypt.compare(password, u.password)
+        if (x) {
+            const jwtToken = jwt.sign({ username: u.username, _id: u._id },
                 process.env.JWT_SECRET,
-                {expiresIn:'24h'}
+                { expiresIn: '24h' }
             )
-            res.status(201).json({ msg: "Login Success!", success: true,jwtToken,username });
+            res.status(201).json({ msg: "Login Success!", success: true, jwtToken, username });
             // Creating jwt token
         }
         else res.status(403).json({ msg: "Invalid Credentials", success: false })
@@ -73,7 +75,7 @@ const loginE = async (req, res) => {
 const signupE = async (req, res) => {
     try {
         const { username, email, password } = await req.body;
-        const u = await EModel.findOne({ username});
+        const u = await EModel.findOne({ username });
         if (u) {
             return res.status(409).json({ msg: "User Exist", success: false })
         }
@@ -90,19 +92,29 @@ const signupE = async (req, res) => {
     }
 }
 
-const em= [
-    { id: 1, companyName: 'Company 1', description: 'Tech company' },
-    { id: 2, companyName: 'Company 2', description: 'Design company' },
+const getUserProfile = async (req, res) => {
 
-  ];
-const sendJSdata=async(req,res)=>{
-    res.json(em);
+    try {
+        const username = req.params.username
+        const data = await UserProfile.findOne({ username })
+        if (!data) return res.status(404).json({ message: "User not found" }); 
+        res.json(data);
+    }
+    catch (error) {
+        
+        res.status(500).json({ message: error.message});
+    }
+
 
 }
+
+
+
+
 module.exports = {
     loginJS,
     signupJS,
     loginE,
     signupE,
-    sendJSdata
+    getUserProfile
 }

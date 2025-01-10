@@ -62,7 +62,6 @@ const router = createBrowserRouter([
     element: <JSdashboard></JSdashboard>
   },
 
-
   {
 
     path: '/user/jobs',
@@ -70,7 +69,7 @@ const router = createBrowserRouter([
   },
 
   {
-    path: '/user/profile',
+    path: '/user/:username',
     element: <UserProfile />
 
   }

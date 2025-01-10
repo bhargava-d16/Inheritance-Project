@@ -1,7 +1,12 @@
+// const { date, array } = require("joi");
 const mongoose=require("mongoose")
 const Schema=mongoose.Schema;
 
 const Userprofile=new Schema({
+    username:{
+        type: String,
+    },
+    
     name:{
         type:String,
         required:true,
@@ -28,10 +33,13 @@ const Userprofile=new Schema({
         type:String,
     },
     skills:{
-        type:String,
+        type:Array,
     },
     currentlyworking:{
         type:String,
+    },
+    DOB:{
+        type: Date
     }
 })
 
