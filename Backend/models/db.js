@@ -2,7 +2,7 @@
 // const WInCO3oPxm3SnMFU
 const mongoose = require('mongoose');
 const mongo_url = process.env.MONGO_CONN;
-const { UserProfile } = require("./userprofile");
+const  UserProfile  = require("./userprofile");
 
 // const connectDB = async () => {
 //     await mongoose.connect(mongo_url)
@@ -13,21 +13,36 @@ const { UserProfile } = require("./userprofile");
 //         })
 // }
 // connectDB()
-async function connectDB() {
+// async function connectDB() {
+//     try {
+//       await mongoose.connect(mongo_url);
+//       console.log("hehe connecteed")
+//       console.log("MongoDB Connected");
+//     } catch (error) {
+//       console.error("MongoDB Connection Error:", error);
+//     }
+//   }
+
+  const connectDB = async () => {
     try {
-      await mongoose.connect(mongo_url);
-      console.log("MongoDB Connected");
+        await mongoose.connect(mongo_url, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        console.log(" MongoDB Connected");
     } catch (error) {
-      console.error("MongoDB Connection Error:", error);
+        console.error(" MongoDB Connection Error:", error);
+        process.exit(1); // Stop the server if DB connection fails
     }
-  }
+};
+
   
   
 
 const createUser = async () => {
     try {
         const newUser = new UserProfile({
-            username: "jhon123sssssss",
+            username: "akash",
             name: "John Doe",
             place: "New York",
             email: "johndoe@example.com",
@@ -36,8 +51,9 @@ const createUser = async () => {
             workexperices: "Software Engineer",
             extracirrucular: "Football, Coding",
             academics: "GPA: 3.8",
-            skills: "JavaScript, Node.js, MongoDB",
-            currentlyworking: "Yes"
+            skills: ["JavaScript", "Node.js", "MongoDB"],
+            currentlyworking: "Yes",
+            date: Date(2024, 4, 12)
         
         });
 

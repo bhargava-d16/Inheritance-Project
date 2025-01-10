@@ -75,7 +75,7 @@ const UserProfile = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:8080/user/jhon123")
+    fetch("http://localhost:8080/user/jhon123sssssss")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch user data");

@@ -3,10 +3,10 @@ const mongoose=require("mongoose")
 const Schema=mongoose.Schema;
 
 const Userprofile=new Schema({
+
     username:{
         type: String,
     },
-    
     name:{
         type:String,
         required:true,
@@ -41,8 +41,9 @@ const Userprofile=new Schema({
     DOB:{
         type: Date
     }
+    
 })
 
 
 const UserProfile=mongoose.model('userProfile',Userprofile);
-module.exports = { UserProfile };
+module.exports =  UserProfile ;

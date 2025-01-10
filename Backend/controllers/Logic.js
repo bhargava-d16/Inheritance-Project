@@ -1,10 +1,10 @@
 const { UserModel } = require("../models/user");
 const { EModel } = require("../models/user")
-const { UserProfile } = require("../models/userprofile")
+const  UserProfile  = require("../models/userprofile")
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-
+const mongoose = require('mongoose');
 
 const loginJS = async (req, res) => {
     try {
@@ -72,6 +72,7 @@ const loginE = async (req, res) => {
     }
 
 }
+
 const signupE = async (req, res) => {
     try {
         const { username, email, password } = await req.body;
@@ -94,15 +95,17 @@ const signupE = async (req, res) => {
 
 const getUserProfile = async (req, res) => {
 
+    
+
     try {
         const username = req.params.username
-        const data = await UserProfile.findOne({ username })
+        const data = await UserProfile.findOne({ username:username })
         if (!data) return res.status(404).json({ message: "User not found" }); 
         res.json(data);
     }
     catch (error) {
         
-        res.status(500).json({ message: error.message});
+        res.status(500).json({ message: error.message, hello: "gand mara madarchod"});
     }
 
 
