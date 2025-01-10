@@ -26,14 +26,6 @@ body {
   cursor: pointer;
 }
 
-button {
-  background-color: transparent;
-  color: #2a2a2a;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  text-decoration: underline;
-}
 
 button:hover {
   background-color: #1A1F36;
@@ -50,8 +42,8 @@ button {
   display: inline-block;
   color: white;
   padding: 0.5rem;
-  margin-top: 12px;
-  border-radius: 8px;
+  margin-top: 0.8rem;
+  border-radius: 0.5rem;
   cursor: pointer;
   border: none;
   transition: background-color 0.3s ease;
@@ -131,8 +123,7 @@ button {
 
 .footer {
   color: #FFFFFF;
-  /* height: 6.5vh; */
-  background-color: #1A1F36;
+  background-color: #133E87;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -140,7 +131,173 @@ button {
   bottom: 0;
 }
 
+.Enavbar{
+  background-color:#133E87;
+  width: 100%;
+  height: 3.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.enavbarlinks{
+  width: 60%;
+  display: flex;
+  gap: 3rem;
+}
+.enavbarlinks a{
+  color: #F3F3E0;
+  text-decoration: none;
+}
+.profileicon{
+  transform: scale(0.9);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* Makes it circular */
+  cursor: pointer;
+  margin-right: 10px;
+  
+}
+.imgcontainer{
+  width: 10%;
+  display: flex;
+  justify-content: end;
+}
 
+.heading{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* height: 9rem; */
+  text-align: center;
+  background-color: transparent;
+  padding: 0.9rem;
+  line-height: 1.5rem;
+  transition: all 0.4s ease-in-out;
+}
+.heading h3{
+  font-size: 1.5rem;
+}
+.heading p{
+  width:60%;
+}
+.heading{
+  opacity: 0;
+  /* text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3); */
+  animation: fadeOut 2s forwards; /* Fade in over 2 seconds */
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 1;
+  }
+}
+
+.candidates{
+  border-radius: 1rem;
+  display: flex;
+  justify-content:center;
+  overflow-x:hidden;
+  overflow-y: hidden;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  scrollbar-width: thin;
+  /* scrollbar-3dlight-color: #94a3b8 transparent; */
+}
+.jscard{
+  flex-shrink: 0;
+  width: 20rem;
+  outline: invert;
+  background-color: #fff;
+  border-radius: 0.8rem;
+  padding: 1.2rem;
+  transition: transform 0.2s ease,box-shawdow 0.2s ease;
+  cursor: pointer;
+  box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.3); 
+  transition: box-shadow 0.5s ease-in-out;
+  
+}
+.jscard:hover{
+  transform: translateY(-7px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.X{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.search{
+  padding: 0.8rem;
+  width: 20rem;
+  border-radius: 1rem;
+  border: none;
+  border-bottom: 2px solid #4b9cd3; 
+  outline: none;
+  background: transparent;
+  transition: border color 0.3s ease;
+}
+.search:hover{
+  border-bottom: 3px solid #4b9cd3;
+}
+
+.JSbutton{
+  margin-left: 1rem;
+  color:#F3F3E0;
+  font-size: medium;
+  text-decoration: none;
+  background-color: #133E85;
+  cursor: pointer;
+  border-radius:0.7rem;
+}
+.JSbutton:hover{
+  background-color: transparent;
+  color: black;
+}
+
+.s1{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.s1info{
+  position: relative;
+  bottom: 2rem;
+  right: 1rem;
+}
+.jsimage{
+  height: 9rem;
+  position: relative;
+  right:1.8rem;
+  bottom: 1.8rem;
+}
+.s2{
+  position: relative;
+  bottom: 0.9rem;
+}
+.shortlistbtn{
+  background-color:#133E85;
+  color: #F3F3E0;
+  text-decoration: none;
+  border-radius: 0.5rem;
+}
+.shortlistbtn:hover{
+  background-color: rgba(4, 120, 87, 0.9);
+
+}
+.viewprofilebtn{
+  color:#608BC1;
+  text-decoration: none;
+  border-radius: 0.5rem;
+}
+.btns{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 @media (max-width:763px) {
   .i {
     height: 30px;
@@ -174,6 +331,14 @@ button {
     font-size: xx-large;
     padding-top: 1px;
     padding-bottom: 1px;
+  }
+
+  .heading h3{
+    font-size: large;
+  }
+  .heading p{
+    font-size: medium;
+    width: 90%;
   }
 
 
