@@ -4,8 +4,8 @@ const ENavbar = () => {
   return (
     <div className='Enavbar'>
         <div className="enavbarlinks text-black">
-            <Link>Company Dashboard</Link>
-            <Link>Job Posting</Link>
+            <Link to='/EDashboard'>Logo</Link>
+            <Link to='/EDashboard/jobposting'>Job Posting</Link>
             <Link>Skill Assesment</Link>
         </div>
         <div className="imgcontainer">

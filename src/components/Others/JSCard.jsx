@@ -4,7 +4,6 @@ import { useEffect } from 'react'
 const JSCard = () => {
     const fetchJSdata=async()=>{
         axios.get('http://localhost:8080/Edashboard').then(response=>{
-            console.log(response);
         }).catch(error=>{console.log(error)})
     }
 

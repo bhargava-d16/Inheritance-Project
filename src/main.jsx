@@ -14,7 +14,8 @@ import Edashboard from './components/DashBoards/Edashboard.jsx';
 import JSdashboard from './components/DashBoards/JSdashboard.jsx';
 import Jobs from './pages/Jobs.jsx'
 import UserProfile from './pages/userProfile.jsx'
-
+import JobPost from './components/Others/JobPost.jsx';
+import EMain from './components/Pages/MainComponent/EMain.jsx'
 
 const router = createBrowserRouter([
   {
@@ -53,11 +54,6 @@ const router = createBrowserRouter([
   },
 
   {
-    path: '/EDashboard',
-    element: <Edashboard></Edashboard>
-  },
-
-  {
     path: '/JSDashboard',
     element: <JSdashboard></JSdashboard>
   },
@@ -72,6 +68,21 @@ const router = createBrowserRouter([
     path: '/user/profile',
     element: <UserProfile />
 
+  },
+  {
+    path:'/EDashboard',
+    element:<Edashboard></Edashboard>,
+    children:[
+      {
+        path:'',
+        element:<EMain></EMain> 
+      },
+      {
+        path:'/EDashboard/jobposting',
+        element:<JobPost></JobPost>
+      },
+
+    ]
   }
 
 

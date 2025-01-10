@@ -19,7 +19,6 @@ const EMain = () => {
                 <JSCard></JSCard>
                 <JSCard></JSCard>
                 <JSCard></JSCard> <JSCard></JSCard> <JSCard></JSCard> <JSCard></JSCard> <JSCard></JSCard> <JSCard></JSCard>
-                <JSCard></JSCard><JSCard></JSCard><JSCard></JSCard><JSCard></JSCard><JSCard></JSCard><JSCard></JSCard><JSCard></JSCard>
                 </div>
 
             </div>
