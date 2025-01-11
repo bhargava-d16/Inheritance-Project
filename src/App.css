@@ -265,7 +265,7 @@ button {
 }
 .s1info{
   position: relative;
-  bottom: 2rem;
+  /* bottom: 1.2rem; */
   right: 1rem;
 }
 .jsimage{
@@ -277,6 +277,16 @@ button {
 .s2{
   position: relative;
   bottom: 0.9rem;
+}
+.skills-list {
+  list-style-type: disc; /* or none for no bullets */
+  margin: 0;
+  padding: 0;
+  padding-left: 20px; /* Optional: Add padding for bullets */
+}
+
+.skills-list li {
+  margin-bottom: 5px; /* Spacing between skills */
 }
 .shortlistbtn{
   background-color:#133E85;

@@ -58,14 +58,13 @@ const router = createBrowserRouter([
     element: <JSdashboard></JSdashboard>
   },
 
-
   {
     path: '/user/jobs',
     element: <Jobs />
   },
 
   {
-    path: '/user/profile',
+    path: '/user/:username',
     element: <UserProfile />
 
   },

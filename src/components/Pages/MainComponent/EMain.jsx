@@ -1,8 +1,19 @@
 import React from 'react'
-
+import { useEffect,useState } from 'react'
+import axios from 'axios'
 import JSCard from '../../Others/JSCard'
 
 const EMain = () => {
+    const [data, setData] = useState(null)
+        const fetchJSdata=async()=>{
+            const response=await axios.get('http://localhost:8080/EDashboard').then(response=>{
+                setData(response.data)
+            }).catch(error=>{console.log(error)})
+        }
+    
+        useEffect(() => {
+            fetchJSdata();
+        },)
     return (
         <div>
             <div className="heading bg-red-500">
@@ -14,11 +25,15 @@ const EMain = () => {
                 <input className='search' type="text" placeholder='Search Here' name='search' />
                 <button className='JSbutton '>Search</button>
                 </div>
-                <div className="candidates"> <JSCard></JSCard>
-                <JSCard></JSCard>
-                <JSCard></JSCard>
-                <JSCard></JSCard>
-                <JSCard></JSCard> <JSCard></JSCard> <JSCard></JSCard> <JSCard></JSCard> <JSCard></JSCard> <JSCard></JSCard>
+                <div className="candidates">
+                    {data && Array.isArray(data) && data.map((e,idx)=>{return <JSCard 
+                        key={idx}
+                        name={e.name}
+                        location={e.place}
+                        DOB={e.DOB}
+                        skills={e.skills.join(',')}
+                        exp={e.workexperices}></JSCard>})
+                    }
                 </div>
 
             </div>

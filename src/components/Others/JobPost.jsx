@@ -23,13 +23,7 @@ const JobPost = () => {
     const handleSubmit = async() => {
         console.log(details);
         try {
-            const token=localStorage.getItem('jwtToken')
-            console.log(token)
-            const response=await axios.post('http://localhost:8080/EDashboard/jobposting',details, {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              })
+            const response=await axios.post('http://localhost:8080/EDashboard/jobposting',details)
                 alert("Job has been Posted successfully");
                 setdetails({
                     jobprofile: '',
