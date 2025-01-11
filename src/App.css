@@ -298,7 +298,7 @@ button {
   background-color: rgba(4, 120, 87, 0.9);
 
 }
-.viewprofilebtn{
+.viewprofilebtn a{
   color:#608BC1;
   text-decoration: none;
   border-radius: 0.5rem;

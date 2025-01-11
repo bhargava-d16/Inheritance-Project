@@ -133,7 +133,7 @@ const PostJob = async (req, res) => {
 const sendJSdata = async (req,res) => {
     try {
         const userdata = await UserProfile.find();
-        // Sorting data based on number of unique skills 
+    
         userdata.forEach((data) => {
             data.skills = [...new Set(data.skills)];
         });
@@ -144,7 +144,7 @@ const sendJSdata = async (req,res) => {
             res.status(404).send({ msg: "Users data not found", success: false });
         }
     } catch (error) {
-        console.error(error); // Log the error for debugging
+        console.error(error); 
         res.status(500).json({ msg: "Internal server issue", error });
     }
 }

@@ -1,9 +1,10 @@
 import React from 'react'
 import axios from 'axios'
 import { useEffect } from 'react'
-const JSCard = ({ name, DOB, skills, exp, location }) => {
-    const skillsarray = skills.split(',');
-    const displayedSkills = skillsarray.slice(0, 4);
+import { Link } from 'react-router-dom';
+const JSCard = ({ name, DOB, skills,username, exp, location }) => {
+    
+    const displayedSkills = skills.slice(0, 4);
     return (
         <div className='jscard'>
             <div className="s1">
@@ -21,12 +22,12 @@ const JSCard = ({ name, DOB, skills, exp, location }) => {
                         <li key={index}>{skill.trim()}</li>
                     ))}
                 </ul>
-                {skillsarray.length > 4 ? <p>View More skills in candidate's profile</p> : ""}
+                {skills.length > 4 ? <p>View More skills in candidate's profile</p> : ""}
 
                 <h6>Experience:{exp}</h6>
             </div>
             <div className="btns">
-                <button className='viewprofilebtn '>View Profile</button>
+                <button className='viewprofilebtn '><Link to={`/user/${username}`}>View Profile</Link></button>
                 <button className='shortlistbtn '>ShortList</button>
             </div>
         </div>
