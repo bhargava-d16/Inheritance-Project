@@ -6,9 +6,9 @@ const jobSchema = new mongoose.Schema({
     required: [true, "Job profile is required"],
     trim: true
   },
-  company: {
+  companyusername: {
     type: String,
-    required: [true, "Company name is required"],
+    required: [true, "Company username is required"],
     trim: true
   },
   location: {

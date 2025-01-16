@@ -3,8 +3,7 @@ import { useState } from 'react'
 import axios from 'axios'
 import { Navigate, useNavigate } from 'react-router-dom'
 const JobPost = () => {
-    const navigate=useNavigate()
-    // localStorage.clear()
+    const navigate = useNavigate()
     const [details, setdetails] = useState({
         jobprofile: '',
         location: '',
@@ -15,30 +14,40 @@ const JobPost = () => {
         openings: 0,
         deadline: ''
     })
-    
+
     const handlechange = (e) => {
         setdetails({ ...details, [e.target.name]: e.target.value })
     }
 
-    const handleSubmit = async() => {
+    const jwtToken = localStorage.getItem("jwtToken")
+    // console.log(jwtToken)
+    const handleSubmit = async () => {
         console.log(details);
         try {
-            const response=await axios.post('http://localhost:8080/EDashboard/jobposting',details)
-                alert("Job has been Posted successfully");
-                setdetails({
-                    jobprofile: '',
-                    location: '',
-                    type: '',
-                    desc: '',
-                    requirements: '',
-                    salary: '',
-                    openings: 0,
-                    deadline: ''
-                })
-                navigate("/EDashboard")
-        
-        }catch (error) {
-            console.log('ERROR',error)        
+            const response = await axios.post('http://localhost:8080/EDashboard/jobposting', {
+                details: details
+            }, {
+                headers: {
+                    Authorization: `Bearer ${jwtToken}`,
+                }
+            });
+            
+            alert("Job has been Posted successfully");
+            setdetails({
+                jobprofile: '',
+                location: '',
+                type: '',
+                desc: '',
+                requirements: '',
+                salary: '',
+                openings: 0,
+                deadline: ''
+            }
+            )
+            navigate("/EDashboard")
+
+        } catch (error) {
+            console.log('ERROR', error)
         }
     }
     return (
@@ -49,7 +58,7 @@ const JobPost = () => {
                 <input type="text" placeholder='Type Type here' name='type' onChange={(e) => handlechange(e)} value={details.type} />
                 <textarea type="text" placeholder='Desc Type here' name='desc' onChange={(e) => handlechange(e)} value={details.desc} />
                 <textarea type="text" placeholder='Requirements Type here' name='requirements' onChange={(e) => handlechange(e)} value={details.requirements} />
-                <input type="text" placeholder= 'Salary Type here' name='salary' onChange={(e) => handlechange(e)} value={details.salary} />
+                <input type="text" placeholder='Salary Type here' name='salary' onChange={(e) => handlechange(e)} value={details.salary} />
                 <input type="text" placeholder='Openings  Type here' name='openings' onChange={(e) => handlechange(e)} value={details.openings} />
                 <input type="date" placeholder='Deadline Type here' name='deadline' onChange={(e) => handlechange(e)} value={details.deadline} />
                 <button onClick={handleSubmit} className='px-2 py-3 bg-emerald-600 rounded-lg text-white'>Post In</button>

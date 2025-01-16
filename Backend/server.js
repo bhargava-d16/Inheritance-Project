@@ -7,7 +7,7 @@ const { connectDB, createUser } = require("./models/db");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const { loginValidation, signupValidation } = require("./middlewares/Validation");
-const { loginJS, signupJS, loginE, signupE, getUserProfile,sendJSdata,PostJob,shortlistCandidate } = require("./controllers/Logic");
+const { loginJS, signupJS, loginE, signupE, getUserProfile,sendJSdata,PostJob,shortlistCandidate,searchcandidates } = require("./controllers/Logic");
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -26,9 +26,10 @@ const startServer = async () => {
 } 
 startServer();
 // Call the function to start the server
-app.post('/EDashboard',shortlistCandidate)
-app.get('/EDashboard',sendJSdata)
-app.post('/EDashboard/jobposting',PostJob)
+app.get('/EDashboard/search',searchcandidates);
+app.post('/EDashboard',shortlistCandidate);
+app.get('/EDashboard',sendJSdata);
+app.post('/EDashboard/jobposting',PostJob);
 app.post("/login/employeer", loginValidation, loginE);
 app.post("/signup/employeer", signupValidation, signupE);
 app.post("/login/jobseeker", loginValidation, loginJS);

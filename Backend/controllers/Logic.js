@@ -7,6 +7,7 @@ const JobsModel = require("../models/Jobs");
 const { ObjectId } = require('mongodb');
 const mongoose = require('mongoose');
 const shortlisted = require("../models/shortlist");
+const companyprofile = require("../models/companyprofile");
 
 
 
@@ -73,34 +74,48 @@ const loginE = async (req, res) => {
             res.status(201).json({ msg: "Login Success!", success: true, jwtToken, username });
         }
         else res.status(403).json({ msg: "Invalid Credentials", success: false })
+        
     } catch (error) {
         res.status(500).json({ msg: "Internal server issue", error })
     }
-
 }
 const signupE = async (req, res) => {
     try {
-        const { username, email, password } = await req.body;
-        const u = await EModel.findOne({ username });
-        if (u) {
-            return res.status(409).json({ msg: "User Exist", success: false })
+        const { username, email, password } = req.body;
+        const existingUser = await EModel.findOne({ username });
+        if (existingUser) {
+            return res.status(409).json({ msg: "User already exists", success: false });
         }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
         const employer = new EModel({
             username,
             email,
-            password
-        })
-        employer.password = await bcrypt.hash(password, 10);
+            password: hashedPassword
+        });
         await employer.save();
+
         const jwtToken = jwt.sign({ username: employer.username, _id: employer._id },
             process.env.JWT_SECRET,
             { expiresIn: "24h" }
         );
-        res.status(201).json({ msg: "SignUp Success!", success: true, jwtToken });
+
+        const userProfile = new companyprofile({
+            username,
+            email: email,
+        });
+        await userProfile.save();
+        res.status(201).json({
+            msg: "SignUp Success!",
+            success: true,
+            jwtToken,
+            username
+        });
     } catch (error) {
-        res.status(500).json({ msg: "Internal server issue", error })
+        console.error("Error during signup:", error);
+        res.status(500).json({ msg: "Internal server issue", error: error.message });
     }
-}
+};
 
 
 
@@ -114,7 +129,7 @@ const getUserProfile = async (req, res) => {
     }
     catch (error) {
 
-        res.status(500).json({ message: error.message, hello: "gand mara madarchod" });
+        res.status(500).json({ message: error.message, hello: 'sfghjk wertyu sdfgh' });
     }
 }
 
@@ -123,10 +138,25 @@ const getUserProfile = async (req, res) => {
 
 const PostJob = async (req, res) => {
     try {
-        const details = await req.body;
+        const { details } = req.body;
+
+        if (!details || !details.jobprofile || !details.location || !details.salary) {
+            return res.status(400).json({ msg: "Missing job details", success: false });
+        }
+
+        const authHeader = req.headers.authorization;
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            return res.status(401).json({ msg: "JWT must be provided", success: false });
+        }
+
+        const jwtToken = authHeader.split(" ")[1];
+        const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET);
+
+        console.log("Decoded JWT:", decoded);
+
         const job = new JobsModel({
             jobprofile: details.jobprofile,
-            company: 'Oracle',
+            companyusername: decoded.username, 
             location: details.location,
             salary: details.salary,
             type: details.type,
@@ -135,81 +165,43 @@ const PostJob = async (req, res) => {
             deadline: details.deadline,
             openings: details.openings,
             createdAt: new Date(),
-        })
+        });
+
         await job.save();
-        res.status(201).json({ msg: "Job posting Success!", success: true });
+        
+        res.status(201).json({ msg: "Job posting success!", success: true });
     } catch (error) {
-        res.status(500).json({ msg: "Internal server issue", error })
+        console.error("Error in PostJob:", error.message);
+        res.status(500).json({ msg: "Internal server issue", error: error.message });
     }
-}
+};
 
 
-// const sendJSdata = async (req, res) => {
-//     try {
-//         const { filter, page = 1 } = req.query;  // Default page is 1
-//         const authHeader = req.headers.authorization;
+const searchcandidates = async (req, res) => {
+    try {
+        const { search } = req.query;
+        const data = await UserProfile.find();
+        const results = data.filter(elem =>
+            elem.name.toLowerCase().includes(search.toLowerCase()) ||
+            elem.skills.some(skill => skill.toLowerCase().includes(search.toLowerCase()))
+        );
+        res.status(200).json({
+            data: results,
+        });
 
-//         // JWT validation
-//         if (!authHeader || !authHeader.startsWith("Bearer ")) {
-//             return res.status(401).json({ msg: "JWT must be provided", success: false });
-//         }
+    } catch (error) {
+        console.error("Search Unsuccessful:", error);
+        res.status(500).json({
+            msg: "Internal server error",
+            error: error.message,
+        });
+    }
+};
 
-//         const jwtToken = authHeader.split(" ")[1];
-//         const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET);
-//         const companyid = decoded._id;
-
-//         let userdata;
-//         if (filter === "all" || !filter) {
-//             userdata = await UserProfile.find();
-//         } else if (filter === "notworking") {
-//             userdata = await UserProfile.find({ currentlyworking: "" });
-//         } else if (filter === "opentooffers") {
-//             userdata = await UserProfile.find({ opentooffers: true });
-//         }
-
-//         const company = await shortlisted.findOne({ companyid });
-//         const SLcandidates = company ? company.candidates : [];
-//         userdata.forEach((data) => {
-//             data.skills = [...new Set(data.skills)];
-//         });
-//         userdata.sort((a, b) => b.skills.length - a.skills.length);
-
-//         // Pagination logic
-//         const usersPerPage = 10; // Show 10 users per page
-//         const totalUsers = userdata.length;
-//         const totalPages = Math.ceil(totalUsers / usersPerPage); // Total pages calculation
-
-//         // Calculate pagination offsets
-//         const startIndex = (page - 1) * usersPerPage;
-//         const endIndex = page * usersPerPage;
-
-//         const paginatedUsers = userdata.slice(startIndex, endIndex); // Slice users for current page
-
-//         // Send paginated data along with pagination info
-//         const response = paginatedUsers.map((elem) => ({
-//             ...elem.toObject(),
-//             isshortlisted: SLcandidates.includes(elem._id.toString()) ? true : false,
-//         }));
-
-//         res.json({
-//             data: response,
-//             totalPages, // Total number of pages
-//             currentPage: page,
-//             totalUsers, // Total number of users
-//         });
-
-//     } catch (error) {
-//         console.error(error);
-//         if (error.name === "JsonWebTokenError") {
-//             return res.status(401).json({ msg: "Invalid or missing JWT", error });
-//         }
-//         res.status(500).json({ msg: "Internal server issue", error });
-//     }
-// };
 
 const sendJSdata = async (req, res) => {
     try {
-        const { filter, search, page = 1, limit = 10 } = req.query; // Default page = 1, limit = 10
+        const { filter, page = 1, limit = 10 } = req.query;
         const authHeader = req.headers.authorization;
 
         if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -220,18 +212,6 @@ const sendJSdata = async (req, res) => {
         const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET);
         const companyid = decoded._id;
 
-        // Build search criteria
-        let searchCriteria = {};
-        if (search) {
-            searchCriteria = {
-                $or: [
-                    { name: { $regex: search, $options: 'i' } },  // Case-insensitive search
-                    { skills: { $elemMatch: { $regex: search, $options: 'i' } } }
-                ],
-            };
-        }
-
-        // Filtering based on the category
         let filterCriteria = {};
         if (filter === "notworking") {
             filterCriteria.currentlyworking = "";
@@ -239,17 +219,14 @@ const sendJSdata = async (req, res) => {
             filterCriteria.opentooffers = true;
         }
 
-        // Query the database with filters and search
         const userdata = await UserProfile.find({
             ...filterCriteria,
-            ...searchCriteria
         })
-        .skip((page - 1) * limit)
-        .limit(limit);
+            .skip((page - 1) * limit)
+            .limit(limit);
 
         const total = await UserProfile.countDocuments({
             ...filterCriteria,
-            ...searchCriteria
         });
 
         const totalPages = Math.ceil(total / limit);
@@ -270,7 +247,7 @@ const sendJSdata = async (req, res) => {
         if (userdata.length > 0) {
             res.json({
                 data: response,
-                totalPages, 
+                totalPages,
                 currentPage: parseInt(page, 10),
                 total,
             });
@@ -330,8 +307,6 @@ const shortlistCandidate = async (req, res) => {
     }
 };
 
-
-
 module.exports = {
     loginJS,
     signupJS,
@@ -340,5 +315,6 @@ module.exports = {
     PostJob,
     sendJSdata,
     getUserProfile,
-    shortlistCandidate
+    shortlistCandidate,
+    searchcandidates
 }

@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import JSCard from '../../Others/JSCard';
 import { Link } from 'react-router-dom';
-import debounce from 'debounce';
-
 const EMain = () => {
     const [data, setData] = useState([]);
     const [fdata, setFdata] = useState([]);
@@ -13,17 +11,14 @@ const EMain = () => {
     const [totalPages, setTotalPages] = useState(0);
     const [currPage, setCurrPage] = useState(1);
 
-    const debouncedSearch = debounce((query) => {
-        fetchJSdata(query, filter, currPage);
-    }, 200);
-    const fetchJSdata = async (query = search, filterValue = filter, page = currPage) => {
+    const fetchJSdata = async (filterValue = filter, page = currPage) => {
         try {
             const jwtToken = localStorage.getItem('jwtToken');
             setLoading(true);
 
             const response = await axios.get('http://localhost:8080/EDashboard', {
                 params: {
-                    search: query,
+                    search: search,
                     filter: filterValue,
                     page,
                     limit: 10,
@@ -45,19 +40,26 @@ const EMain = () => {
         }
     };
 
-    useEffect(() => {
-        debouncedSearch(search); 
-    }, [search, filter, currPage]);
-
-    const handleSearch = (e) => {
-        const query = e.target.value.toLowerCase();
-        setSearch(query); // Update search state immediately
-        debouncedSearch(query); // Debounce API call
+    // Function to handle search
+    const OnSearch = async () => {
+        try {
+            const searchres = await axios.get('http://localhost:8080/EDashboard/search', {
+                params: { search }
+            });
+            setFdata(searchres.data.data);  // Update the state with the results
+            setTotalPages(1); // Set total pages to 1 as it's a search result
+            setCurrPage(1); // Reset to the first page
+        } catch (error) {
+            console.error('Error during search:', error);
+        }
     };
 
-    const clearSearch = () => {
-        setSearch('');
-        setCurrPage(1);
+    // Function to reset search and view all candidates
+    const resetSearch = () => {
+        setSearch('');  // Clear the search input
+        setFdata(data); // Reset filtered data to show all candidates
+        setTotalPages(Math.ceil(data.length / 10)); // Update total pages based on data length
+        setCurrPage(1); // Reset page to 1
     };
 
     const handleFilterChange = (newFilter) => {
@@ -77,6 +79,10 @@ const EMain = () => {
         }
     };
 
+    useEffect(() => {
+        fetchJSdata(filter, currPage);
+    }, [filter, currPage]);
+
     return (
         <div className='Emain'>
             <div className="heading bg-red-500">
@@ -94,10 +100,13 @@ const EMain = () => {
                         type="text"
                         placeholder="Search Here"
                         value={search}
-                        onChange={handleSearch}
+                        onChange={(e) => setSearch(e.target.value)}
                     />
-                    <button className="JSbutton" onClick={clearSearch}>
-                        Clear
+                    <button className="JSbutton" onClick={OnSearch}>
+                        Search
+                    </button>
+                    <button className="JSbutton" onClick={resetSearch}>
+                        Show All Candidates
                     </button>
                 </div>
                 <div className="candidatesFilterbuttons">
@@ -138,32 +147,28 @@ const EMain = () => {
                 </div>
             </div>
             <div className='last'>
-
-            <div className="pagination flex items-center justify-center gap-10">
-                <button
-                    className="prev-button bg-blue-700"
-                    disabled={currPage === 1}
-                    onClick={handlePrevPage}
-                >
-                    Previous
-                </button>
-                <span>
-                    Page {currPage} of {totalPages}
-                </span>
-                <button
-                    className="next-button bg-blue-600"
-                    disabled={currPage === totalPages}
-                    onClick={handleNextPage}
-                >
-                    Next
-                </button>
-            </div>
-            <div className="edbbutton flex items-center justify-center gap-10">
-                <Link to="/EDashboard/allcandidates" state={{ data }}>
-                    View All Candidates
-                </Link>
-                <Link to="/EDashboard/postjob">Post a Job</Link>
-            </div>
+                <div className="pagination flex items-center justify-center gap-10">
+                    <button
+                        className="prev-button bg-blue-700"
+                        disabled={currPage === 1}
+                        onClick={handlePrevPage}
+                    >
+                        Previous
+                    </button>
+                    <span>
+                        Page {currPage} of {totalPages}
+                    </span>
+                    <button
+                        className="next-button bg-blue-600"
+                        disabled={currPage === totalPages}
+                        onClick={handleNextPage}
+                    >
+                        Next
+                    </button>
+                </div>
+                <div className="edbbutton flex items-center justify-center gap-10">
+                    <Link to="/EDashboard/applications">View Your Stats.</Link>
+                </div>
             </div>
         </div>
     );
