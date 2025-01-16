@@ -1,10 +1,34 @@
 import React from 'react'
 import axios from 'axios'
-import { useEffect } from 'react'
+import { useEffect,useState } from 'react'
 import { Link } from 'react-router-dom';
-const JSCard = ({ name, DOB, skills,username, exp, location }) => {
-    
+const JSCard = ({ name, DOB, skills, username, exp, location,id,isshortlisted,opentooffers }) => {
     const displayedSkills = skills.slice(0, 4);
+    const [shortlist, setShortlist] = useState(isshortlisted)
+    const handleShortlist = async (e, id) => {
+        const action = shortlist ? "reject" : "shortlist"; 
+        const jwtToken = localStorage.getItem("jwtToken");
+
+        try {
+            const response = await axios.post(
+                "http://localhost:8080/EDashboard",
+                { id, action },
+                {
+                    headers: { Authorization: `Bearer ${jwtToken}` },
+                }
+            );
+
+            if (response.data.success) {
+                setShortlist(!shortlist);
+                console.log(response.data.msg);
+            } else {
+                console.error("Error:", response.data.msg);
+            }
+        }catch (error) {
+            console.error("Error updating shortlist status:", error);
+        }
+    };
+    
     return (
         <div className='jscard'>
             <div className="s1">
@@ -19,7 +43,7 @@ const JSCard = ({ name, DOB, skills,username, exp, location }) => {
                 <h4>Skills</h4>
                 <ul className="skills-list">
                     {displayedSkills.map((skill, index) => (
-                        <li key={index}>{skill.trim()}</li>
+                        index < 10 ? <li key={index}>{skill.trim()}</li> : null
                     ))}
                 </ul>
                 {skills.length > 4 ? <p>View More skills in candidate's profile</p> : ""}
@@ -28,7 +52,8 @@ const JSCard = ({ name, DOB, skills,username, exp, location }) => {
             </div>
             <div className="btns">
                 <button className='viewprofilebtn '><Link to={`/user/${username}`}>View Profile</Link></button>
-                <button className='shortlistbtn '>ShortList</button>
+                {opentooffers?<button className='shortlistbtn' onClick={(e)=>handleShortlist(e,id)}>{(shortlist)?"Reject":"ShortList"}</button>:""}
+                
             </div>
         </div>
     )

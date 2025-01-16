@@ -1,15 +1,13 @@
 
-
 require("dotenv").config();
 const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 8080;
-
 const { connectDB, createUser } = require("./models/db");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const { loginValidation, signupValidation } = require("./middlewares/Validation");
-const { loginJS, signupJS, loginE, signupE, getUserProfile,sendJSdata,PostJob } = require("./controllers/Logic");
+const { loginJS, signupJS, loginE, signupE, getUserProfile,sendJSdata,PostJob,shortlistCandidate } = require("./controllers/Logic");
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -22,13 +20,13 @@ const startServer = async () => {
         
     }catch (error) {
         console.error("❌ Error starting server:", error);
-        process.exit(1); // Exit if there's an error
+        process.exit(1); 
     }
     
 } 
 startServer();
 // Call the function to start the server
-
+app.post('/EDashboard',shortlistCandidate)
 app.get('/EDashboard',sendJSdata)
 app.post('/EDashboard/jobposting',PostJob)
 app.post("/login/employeer", loginValidation, loginE);

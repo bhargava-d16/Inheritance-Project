@@ -29,6 +29,7 @@ const SignupE = () => {
           email: '',
           password: ''
         })
+        localStorage.setItem('jwtToken',response.data.jwtToken);
         navigate('/EDashboard')
 
       }

@@ -16,6 +16,8 @@ import Jobs from './pages/Jobs.jsx'
 import UserProfile from './pages/userProfile.jsx'
 import JobPost from './components/Others/JobPost.jsx';
 import EMain from './components/Pages/MainComponent/EMain.jsx'
+import AllCandidates from './pages/AllCandidates.jsx';
+import Applications from './pages/Applications.jsx';
 
 const router = createBrowserRouter([
   {
@@ -80,7 +82,13 @@ const router = createBrowserRouter([
         path:'/EDashboard/jobposting',
         element:<JobPost></JobPost>
       },
-
+      {
+        path:'/EDashboard/allcandidates',
+        element:<AllCandidates></AllCandidates>
+      },{
+        path:'/EDashboard/applications',
+        element:<Applications></Applications>
+      }
     ]
   }
 

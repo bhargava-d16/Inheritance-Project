@@ -38,6 +38,10 @@ const Userprofile=new Schema({
     currentlyworking:{
         type:String,
     },
+    opentooffers:{
+        type:Boolean,
+        default:true
+    },
     DOB:{
         type: Date
     }
