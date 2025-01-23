@@ -24,6 +24,7 @@ const LoginJs = () => {
           username:'',
           password:''
         }) 
+        localStorage.setItem("jwtToken",response.data.jwtToken)
         navigate('/JSDashboard')
       }
     } catch (error) {

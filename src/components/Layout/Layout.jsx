@@ -6,9 +6,12 @@ import Footer from '../Others/Footer'
 const Layout = () => {
   return (
     <div className=''>
-        <Header></Header>
-        <Outlet></Outlet>
+      <Header></Header>
+      <Outlet></Outlet>
+      <footer>
         <Footer></Footer>
+
+      </footer>
     </div>
   )
 }

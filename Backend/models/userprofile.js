@@ -6,16 +6,18 @@ const Userprofile=new Schema({
 
     username:{
         type: String,
+        required:true,
     },
     name:{
         type:String,
-        required:true,
+
     },
     place:{
         type:String,
     },
     email:{
         type:String,
+        required:true,
     },
     phone:{
         type:String,

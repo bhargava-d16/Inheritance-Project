@@ -27,6 +27,7 @@ const SignupJs = () => {
           email:'',
           password:''
         })
+        localStorage.setItem("jwtToken",response.data.jwtToken)
         navigate('/JSDashboard')
 
       }

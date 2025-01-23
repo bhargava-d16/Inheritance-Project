@@ -5,23 +5,22 @@ import { Link } from 'react-router-dom';
 const JSCard = ({ name, DOB, skills, username, exp, location,id,isshortlisted,opentooffers }) => {
     const displayedSkills = skills.slice(0, 4);
     const [shortlist, setShortlist] = useState(isshortlisted)
-    const handleShortlist = async (e, id) => {
-        const action = shortlist ? "reject" : "shortlist"; 
+    const handleShortlist = async (e) => {
         const jwtToken = localStorage.getItem("jwtToken");
 
         try {
             const response = await axios.post(
                 "http://localhost:8080/EDashboard",
-                { id, action },
+                { username},
                 {
                     headers: { Authorization: `Bearer ${jwtToken}` },
                 }
             );
-
             if (response.data.success) {
-                setShortlist(!shortlist);
+                alert("User has been notified for this!")
                 console.log(response.data.msg);
             } else {
+                alert("User has been already Reached out")
                 console.error("Error:", response.data.msg);
             }
         }catch (error) {
@@ -52,7 +51,7 @@ const JSCard = ({ name, DOB, skills, username, exp, location,id,isshortlisted,op
             </div>
             <div className="btns">
                 <button className='viewprofilebtn '><Link to={`/user/${username}`}>View Profile</Link></button>
-                {opentooffers?<button className='shortlistbtn' onClick={(e)=>handleShortlist(e,id)}>{(shortlist)?"Reject":"ShortList"}</button>:""}
+                {opentooffers?<button className='shortlistbtn' onClick={(e)=>handleShortlist(e,username)}>Reach Out..</button>:" "}
                 
             </div>
         </div>

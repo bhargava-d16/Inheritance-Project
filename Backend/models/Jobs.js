@@ -23,10 +23,7 @@ const jobSchema = new mongoose.Schema({
   type: {
     type: String,
     required: [true, "Job type is required"]
-    // enum: {
-    //   values: ['Full-time', 'Part-time', 'Internship', 'Contract'],
-    //   message: "{VALUE} is not a valid job type"
-    // }
+
   },
   description: {
     type: String,
@@ -43,6 +40,13 @@ const jobSchema = new mongoose.Schema({
   openings: {
     type: Number,
     default: 1 
+  },
+  experience:{
+    type:String,
+  },
+  appliedCandidatesID:{
+    type:Array,
+    default:[]
   }
 }, 
 {

@@ -121,32 +121,76 @@ button {
    text-align: center;
 }
 
-.footer {
-  color: #FFFFFF;
-  background-color: #133E87;
-  display: flex;
-  align-items: center;
-  position:relative;
-  justify-content: center;
-  bottom: 0;
-}
 
-.Enavbar{
-  background-color:#133E87;
+
+
+.Enavbar {
+  background-color: #133E87;
   width: 100%;
   height: 3.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-.enavbarlinks{
-  width: 60%;
+
+.menu-icon {
+  font-size: 1.5rem;
+  color: #f3f3e0;
+  cursor: pointer;
+  display: none;
+}
+
+.enavbarlinks {
   display: flex;
-  gap: 3rem;
+  gap: 2rem;
 }
-.enavbarlinks a{
-  color: #F3F3E0;
+
+.enavbarlinks a {
+  color: #f3f3e0;
   text-decoration: none;
+}
+
+.imgcontainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100%;
+  background-color: #133e87;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.sidebar.open {
+  transform: translateX(0);
+  
+}
+
+.sidebar a {
+  color: #f3f3e0;
+  text-decoration: none;
+}
+
+.sidebar .close-btn {
+  font-size: 1.5rem;
+  color: #f3f3e0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  align-self: flex-end;
 }
 .profileicon{
   transform: scale(0.9);
@@ -185,10 +229,6 @@ button {
   opacity: 0;
   animation: fadeOut 2s forwards;
 }
-/* .Emain{
-  height: 100vh;
-  width: 100vw;
-} */
 
 @keyframes fadeOut {
   to {
@@ -219,11 +259,11 @@ button {
   transition: transform 0.2s ease,box-shawdow 0.2s ease;
   cursor: pointer;
   box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.3); 
-  transition: box-shadow 0.5s ease-in-out;
+  transition: box-shadow 0.7s ease-in-out;
   
 }
 .jscard:hover{
-  transform: translateY(-7px);
+  transform: translateY(-5px);
   box-shadow: 0 6px 12px rgba(0,0,0,0.15);
 }
 
@@ -237,13 +277,13 @@ button {
   width: 20rem;
   border-radius: 1rem;
   border: none;
-  border-bottom: 2px solid #4b9cd3; 
+  border-bottom: 2px solid #133E85; 
   outline: none;
   background: transparent;
   transition: border color 0.3s ease;
 }
 .search:hover{
-  border-bottom: 3px solid #4b9cd3;
+  border-bottom: 3px solid #133E85;
 }
 
 .JSbutton{
@@ -324,7 +364,7 @@ button {
     border: none;
     border-radius: 0.4rem;
     cursor: pointer;
-    transition: all 0.3s ease-in-out;
+    transition: all 0.5s ease-in-out;
     font-weight: bold;
     text-transform: uppercase;
 }
@@ -337,6 +377,61 @@ button {
 .last{
   position: relative;
   bottom: 0;
+}
+
+.Jobstable{
+  margin: auto;
+}
+table {
+  width: 75%;
+  border-collapse: collapse;
+  margin: 1rem 1rem 0;
+  font-size: 1rem;
+  text-align: left;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 0.5rem 0.8rem rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+  padding: 0.8rem 0.9rem;
+  border: 1px solid #ddd;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tr:hover {
+  background-color: #eef7ff;
+  cursor: pointer;
+}
+
+.pagination{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  margin-bottom: 2rem;
+}
+.pagination button {
+  background-color: #133E85;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  margin: 0 4px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.stats{
+  height: 12.7rem;
+}
+
+.search-jobs{
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @media (max-width:763px) {
@@ -385,12 +480,26 @@ button {
     flex-direction: column;
 }
 .search{
-  width: 70%;
+  width: 50%;
 }
 
 .filterbtns{
     width: 100%;
     margin: 0.5rem 0;
+}
+.menu-icon {
+  display: block; 
+}
+
+.enavbarlinks {
+  display: none;
+}
+
+.sidebar{
+  display: flex;
+  transform: translateX(0);
+  
+  
 }
 
 

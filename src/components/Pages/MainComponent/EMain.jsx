@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import JSCard from '../../Others/JSCard';
 import { Link } from 'react-router-dom';
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa"
+
 const EMain = () => {
     const [data, setData] = useState([]);
     const [fdata, setFdata] = useState([]);
@@ -30,7 +32,7 @@ const EMain = () => {
 
             const { data, totalPages, currentPage } = response.data;
             setData(data);
-            setFdata(data); // Only store filtered data
+            setFdata(data);
             setTotalPages(totalPages);
             setCurrPage(currentPage);
             setLoading(false);
@@ -40,26 +42,27 @@ const EMain = () => {
         }
     };
 
-    // Function to handle search
+
     const OnSearch = async () => {
         try {
             const searchres = await axios.get('http://localhost:8080/EDashboard/search', {
                 params: { search }
             });
-            setFdata(searchres.data.data);  // Update the state with the results
-            setTotalPages(1); // Set total pages to 1 as it's a search result
-            setCurrPage(1); // Reset to the first page
+            setFdata(searchres.data.data);
+            setTotalPages(1);
+            setCurrPage(1);
         } catch (error) {
             console.error('Error during search:', error);
         }
     };
 
-    // Function to reset search and view all candidates
     const resetSearch = () => {
-        setSearch('');  // Clear the search input
-        setFdata(data); // Reset filtered data to show all candidates
-        setTotalPages(Math.ceil(data.length / 10)); // Update total pages based on data length
-        setCurrPage(1); // Reset page to 1
+        setSearch(''); 
+        setFilter('all'); 
+        setFdata(data); 
+        setTotalPages(Math.ceil(data.length / 10)+1);
+        setCurrPage(1); 
+
     };
 
     const handleFilterChange = (newFilter) => {
@@ -106,7 +109,7 @@ const EMain = () => {
                         Search
                     </button>
                     <button className="JSbutton" onClick={resetSearch}>
-                        Show All Candidates
+                        Reset
                     </button>
                 </div>
                 <div className="candidatesFilterbuttons">
@@ -153,7 +156,7 @@ const EMain = () => {
                         disabled={currPage === 1}
                         onClick={handlePrevPage}
                     >
-                        Previous
+                        <FaChevronLeft></FaChevronLeft>
                     </button>
                     <span>
                         Page {currPage} of {totalPages}
@@ -163,11 +166,8 @@ const EMain = () => {
                         disabled={currPage === totalPages}
                         onClick={handleNextPage}
                     >
-                        Next
+                        <FaChevronRight></FaChevronRight>
                     </button>
-                </div>
-                <div className="edbbutton flex items-center justify-center gap-10">
-                    <Link to="/EDashboard/applications">View Your Stats.</Link>
                 </div>
             </div>
         </div>
