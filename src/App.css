@@ -265,7 +265,7 @@ button {
 }
 .s1info{
   position: relative;
-  bottom: 2rem;
+  /* bottom: 1.2rem; */
   right: 1rem;
 }
 .jsimage{
@@ -278,6 +278,16 @@ button {
   position: relative;
   bottom: 0.9rem;
 }
+.skills-list {
+  list-style-type: disc; /* or none for no bullets */
+  margin: 0;
+  padding: 0;
+  padding-left: 20px; /* Optional: Add padding for bullets */
+}
+
+.skills-list li {
+  margin-bottom: 5px; /* Spacing between skills */
+}
 .shortlistbtn{
   background-color:#133E85;
   color: #F3F3E0;
@@ -288,7 +298,7 @@ button {
   background-color: rgba(4, 120, 87, 0.9);
 
 }
-.viewprofilebtn{
+.viewprofilebtn a{
   color:#608BC1;
   text-decoration: none;
   border-radius: 0.5rem;
