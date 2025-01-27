@@ -11,7 +11,7 @@ const cors = require("cors");
 
 
 // const { loginValidation, signupValidation } = require("./middlewares/Validation");
-const {  getUserProfile,sendJSdata,PostJob,getJobs,getCompanyDetails,putJobApplication,getUser} = require("./controllers/Logic");
+const {  searchcandidates,shortlistCandidate,sendjobposts,sendjobdata,reachoutcandidates,getUserProfile,sendJSdata,PostJob,getJobs,getCompanyDetails,putJobApplication,getUser} = require("./controllers/Logic");
 
 const registeruser = require("./controllers/registeruser");
 const registeremp = require("./controllers/registeremp");
@@ -44,8 +44,13 @@ const startServer = async () => {
 startServer();
 // Call the function to start the server
 
-app.get('/EDashboard',sendJSdata)
-app.post('/EDashboard/jobposting',PostJob)
+app.post('/EDashboard/myjobs/:id',shortlistCandidate)
+app.get('/EDashboard/myjobs/:id',sendjobdata);
+app.get('/EDashboard/myjobs',sendjobposts)
+app.get('/EDashboard/search',searchcandidates);
+app.post('/EDashboard',reachoutcandidates);
+app.get('/EDashboard',sendJSdata);
+app.post('/EDashboard/jobposting',PostJob);
 app.get("/user/:username", getUserProfile);
 app.get("/jobs", getJobs);
 app.get("/jobs/:companyusername", getCompanyDetails);

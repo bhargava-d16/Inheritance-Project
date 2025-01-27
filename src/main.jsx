@@ -21,7 +21,8 @@ import CompanyDetails from './pages/CompanyDetails.jsx';
 import User from './pages/User';
 import { AuthContextProvider } from './context/authcontext.jsx';
 import { Toaster} from 'react-hot-toast';
-
+import AllJobs from './components/Others/Alljobs.jsx';
+import JobApplications from './components/Others/JobApplications.jsx';
 
 const router = createBrowserRouter([
   {
@@ -98,6 +99,14 @@ const router = createBrowserRouter([
         path: '/EDashboard/jobposting',
         element: <JobPost></JobPost>
       },
+      {
+        path:'/EDashboard/myjobs',
+        element:<AllJobs></AllJobs>
+      },
+      {
+        path:'/EDashboard/myjobs/:id',
+        element:<JobApplications></JobApplications>
+      }
 
     ]
   }

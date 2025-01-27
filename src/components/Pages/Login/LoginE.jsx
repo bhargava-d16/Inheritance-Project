@@ -7,7 +7,7 @@ import { useAuthContext } from '../../../hooks/useAuthContext';
 import AuthNav from '../Navbars/AuthNav';
 
 const Loginemp = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const {dispatch}=useAuthContext()
@@ -45,7 +45,7 @@ const Loginemp = () => {
         dispatch({type:'LOGIN',payload:response.data})
         toast.success('Login successful!');
         // Add navigation after successful login
-        // navigate('/dashboard'); // Adjust the route as needed
+        navigate('/Edashboard'); // Adjust the route as needed
       } else {
         toast.error('Invalid response from server');
         console.error('Invalid response structure:', response.data);
