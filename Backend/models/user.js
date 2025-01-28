@@ -16,6 +16,10 @@ const UserSchema=new Schema({
         type:String,
         required:true,
         unique:true
+    },
+    createdAt : {
+        type :Date,
+        deafult:Date.now
     }
 })
 
@@ -34,6 +38,10 @@ const ESchema=new Schema({
         type:String,
         required:true,
         unique:true
+    },
+    createdAt : {
+        type :Date,
+        deafult:Date.now
     }
 })
 

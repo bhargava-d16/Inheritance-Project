@@ -1,11 +1,13 @@
+
 import React from 'react';
 
 const Footer = () => {
   return (
     <div
       style={{
-        position:'fixed',
-        bottom:0,
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
         width: '100%',
         backgroundColor: '#f8f9fa', // Light gray background
         padding: '10px 0',
@@ -13,7 +15,7 @@ const Footer = () => {
         textAlign: 'center',
       }}
     >
-      <footer
+      <p
         style={{
           margin: 0,
           fontSize: '16px',
@@ -22,10 +24,9 @@ const Footer = () => {
         }}
       >
         © 2025 Job Portal. All rights reserved.
-      </footer>
+      </p>
     </div>
   );
 };
 
-
-export default Footer
+export default Footer;

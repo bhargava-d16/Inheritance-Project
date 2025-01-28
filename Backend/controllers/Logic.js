@@ -8,129 +8,7 @@ const { ObjectId } = require('mongodb');
 const mongoose = require('mongoose');
 const shortlisted = require("../models/shortlist");
 const companyprofile = require("../models/companyprofile");
-const reachouts = require("../models/reachoutSchmea");
-// const shortlisted = require("../models/shortlist");
-
-
-
-
-const loginJS = async (req, res) => {
-    try {
-        const { username, password } = await req.body;
-        const u = await UserModel.findOne({ username });
-        if (!u) {
-            return res.status(403).json({ msg: "Invalid Credentials Or User Does't Exist", success: false })
-        }
-        const x = await bcrypt.compare(password, u.password)
-        if (x) {
-            const jwtToken = jwt.sign({ username: u.username, _id: u._id, user: 'Candidate' },
-                process.env.JWT_SECRET,
-                { expiresIn: '24h' }
-            )
-            res.status(201).json({ msg: "Login Success!", success: true, jwtToken, username });
-
-        }
-        else res.status(403).json({ msg: "Invalid Credentials", success: false })
-    } catch (error) {
-        res.status(500).json({ msg: "Internal server issue", error })
-    }
-
-}
-const signupJS = async (req, res) => {
-    try {
-        const { username, email, password } = await req.body;
-        const u = await UserModel.findOne({ username });
-        if (u) {
-            return res.status(409).json({ msg: "User Exist", success: false })
-        }
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const user = new UserModel({
-            username,
-            email,
-            password: hashedPassword
-        })
-
-        await user.save();
-        const jwtToken = jwt.sign({ username: user.username, _id: user._id, user: 'Candidate' },
-            process.env.JWT_SECRET,
-            { expiresIn: "24h" }
-        );
-        const newuser = new UserProfile({
-            username,
-            email: email,
-        });
-        await newuser.save();
-        console.log("Yaha tuk hua hia 1")
-        res.status(201).json({ msg: "SignUp Success!", success: true, jwtToken, username });
-    } catch (error) {
-        res.status(500).json({ msg: "Internal server issue", error })
-    }
-}
-
-
-
-
-
-const loginE = async (req, res) => {
-    try {
-        const { username, password } = await req.body;
-        const u = await EModel.findOne({ username });
-        if (!u) {
-            return res.status(403).json({ msg: "Invalid Credentials Or User Does't Exist", success: false })
-        }
-        const x = await bcrypt.compare(password, u.password)
-        if (x) {
-            const jwtToken = jwt.sign({ username: u.username, _id: u._id, user: 'Company' },
-                process.env.JWT_SECRET,
-                { expiresIn: '24h' }
-            )
-            res.status(201).json({ msg: "Login Success!", success: true, jwtToken, username });
-        }
-        else res.status(403).json({ msg: "Invalid Credentials", success: false })
-
-    } catch (error) {
-        res.status(500).json({ msg: "Internal server issue", error })
-    }
-}
-const signupE = async (req, res) => {
-    try {
-        const { username, email, password } = req.body;
-        const existingUser = await EModel.findOne({ username });
-        if (existingUser) {
-            return res.status(409).json({ msg: "User already exists", success: false });
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const employer = new EModel({
-            username,
-            email,
-            password: hashedPassword
-        });
-        await employer.save();
-
-        const jwtToken = jwt.sign({ username: employer.username, _id: employer._id, user: 'Company' },
-            process.env.JWT_SECRET,
-            { expiresIn: "24h" }
-        );
-
-        const userProfile = new companyprofile({
-            username,
-            email: email,
-        });
-        await userProfile.save();
-        res.status(201).json({
-            msg: "SignUp Success!",
-            success: true,
-            jwtToken,
-            username
-        });
-    } catch (error) {
-        console.error("Error during signup:", error);
-        res.status(500).json({ msg: "Internal server issue", error: error.message });
-    }
-};
-
-
+const reachouts = require("../models/reachoutSchema");
 
 
 const getUserProfile = async (req, res) => {
@@ -150,132 +28,157 @@ const getUserProfile = async (req, res) => {
 
 
 const PostJob = async (req, res) => {
-    try {
-        const { details } = req.body;
+  try {
+      const { details } = req.body;
 
-        if (!details || !details.jobprofile || !details.location || !details.salary) {
-            return res.status(400).json({ msg: "Missing job details", success: false });
-        }
+      if (!details || !details.jobprofile || !details.location || !details.salary) {
+          return res.status(400).json({ msg: "Missing job details", success: false });
+      }
 
-        const authHeader = req.headers.authorization;
-        if (!authHeader || !authHeader.startsWith("Bearer ")) {
-            return res.status(401).json({ msg: "JWT must be provided", success: false });
-        }
+      const authHeader = req.headers.authorization;
+      if (!authHeader || !authHeader.startsWith("Bearer ")) {
+          return res.status(401).json({ msg: "JWT must be provided", success: false });
+      }
 
-        const jwtToken = authHeader.split(" ")[1];
-        const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET);
+      const jwtToken = authHeader.split(" ")[1];
+      const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET);
 
-        console.log("Decoded JWT:", decoded);
+      console.log("Decoded JWT:", decoded);
 
-        const job = new JobsModel({
-            jobprofile: details.jobprofile,
-            companyusername: decoded.username,
-            location: details.location,
-            salary: details.salary,
-            type: details.type,
-            description: details.desc,
-            requirements: details.requirements,
-            deadline: details.deadline,
-            openings: details.openings,
-            experience: details.experience,
-            createdAt: new Date(),
-        });
+      const job = new JobsModel({
+          jobprofile: details.jobprofile,
+          companyusername: decoded.username,
+          location: details.location,
+          salary: details.salary,
+          type: details.type,
+          description: details.desc,
+          requirements: details.requirements,
+          deadline: details.deadline,
+          openings: details.openings,
+          experience: details.experience,
+          createdAt: new Date(),
+      });
 
-        await job.save();
+      await job.save();
 
-        res.status(201).json({ msg: "Job posting success!", success: true });
-    } catch (error) {
-        console.error("Error in PostJob:", error.message);
-        res.status(500).json({ msg: "Internal server issue", error: error.message });
-    }
+      res.status(201).json({ msg: "Job posting success!", success: true });
+  } catch (error) {
+      console.error("Error in PostJob:", error.message);
+      res.status(500).json({ msg: "Internal server issue", error: error.message });
+  }
 };
 
-
 const searchcandidates = async (req, res) => {
-    try {
-        const { search } = req.query;
-        const data = await UserProfile.find();
-        const results = data.filter(elem =>
-            (elem.name) && elem.name.toLowerCase().includes(search.toLowerCase()) ||
-            elem.skills && elem.skills.some(skill => skill.toLowerCase().includes(search.toLowerCase()))
-        );
-        res.status(200).json({
-            data: results,
-        });
+  try {
+      const { search } = req.query;
+      const data = await UserProfile.find();
+      const results = data.filter(elem =>
+          (elem.name) && elem.name.toLowerCase().includes(search.toLowerCase()) ||
+          elem.skills && elem.skills.some(skill => skill.toLowerCase().includes(search.toLowerCase()))
+      );
+      res.status(200).json({
+          data: results,
+      });
 
-    } catch (error) {
-        console.error("Search Unsuccessful:", error);
-        res.status(500).json({
-            msg: "Internal server error",
-            error: error.message,
-        });
-    }
+  } catch (error) {
+      console.error("Search Unsuccessful:", error);
+      res.status(500).json({
+          msg: "Internal server error",
+          error: error.message,
+      });
+  }
 };
 
 
 const sendJSdata = async (req, res) => {
+  try {
+    const { filter, page = 1, limit = 10 } = req.query;
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ msg: "JWT must be provided", success: false });
+    }
+
+    const jwtToken = authHeader.split(" ")[1];
+    const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET);
+    const companyid = decoded._id;
+    let filterCriteria = {};
+    if (filter === "notworking") {
+      filterCriteria.currentlyworking = ""; 
+    } else if (filter === "opentooffers") {
+      filterCriteria.opentooffers = { $in: [true, "true", "yes"] }; 
+    }
+    const userdata = await UserProfile.find({
+      ...filterCriteria,
+    })
+      .skip((page - 1) * limit)
+      .limit(limit);
+    const total = await UserProfile.countDocuments({
+      ...filterCriteria,
+    });
+
+    const totalPages = Math.ceil(total / limit);
+    const company = await shortlisted.findOne({ companyid });
+    const SLcandidates = company ? company.candidates.map((elem) => elem.candidateId) : [];
+    userdata.forEach((data) => {
+      data.skills = [...new Set(data.skills)]; 
+    });
+    userdata.sort((a, b) => b.skills.length - a.skills.length); 
+    const response = userdata.map((elem) => ({
+      ...elem.toObject(),
+      isshortlisted: SLcandidates.includes(elem._id.toString()),
+    }));
+    if (userdata.length > 0) {
+      res.json({
+        data: response,
+        totalPages,
+        currentPage: parseInt(page, 10),
+        total,
+      });
+    } else {
+      res.status(200).json({
+        data: [],
+        totalPages: 0,
+        currentPage: parseInt(page, 10),
+        total: 0,
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    if (error.name === "JsonWebTokenError") {
+      return res.status(401).json({ msg: "Invalid or missing JWT", error });
+    }
+    res.status(500).json({ msg: "Internal server issue", error });
+  }
+};
+
+const sendjobdata = async (req, res) => {
+  const { id } = req.params;
+  const job = await JobsModel.findById(id)
+  const appliedusernames = (job.appliedCandidatesID || []);
+  console.log("sjgois",appliedusernames)
+  const candidates = await UserProfile.find({ username: { $in: appliedusernames } })
+  console.log("candidates",candidates)
+  const short=await shortlisted.findOne({jobid:id});
+  console.log(short);
+  let shortcandidates;
+  if(short) shortcandidates=short.candidates
+  else shortcandidates=[]
+  console.log("kjadf",short);
+  res.json({ candidates: candidates,shortlistedcandidates:shortcandidates, msg: "Candidates data recieved successfully!" });
+}
+
+
+const getJobs = async (req, res) => {
     try {
-        const { filter, page = 1, limit = 10 } = req.query;
-        const authHeader = req.headers.authorization;
-
-        if (!authHeader || !authHeader.startsWith("Bearer ")) {
-            return res.status(401).json({ msg: "JWT must be provided", success: false });
-        }
-
-        const jwtToken = authHeader.split(" ")[1];
-        const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET);
-        const companyid = decoded._id;
-        let filterCriteria = {};
-        if (filter === "notworking") {
-            filterCriteria.currentlyworking = "";
-        } else if (filter === "opentooffers") {
-            filterCriteria.opentooffers = true;
-        }
-
-        const userdata = await UserProfile.find({
-            ...filterCriteria,
-        })
-            .skip((page - 1) * limit)
-            .limit(limit);
-
-        const total = await UserProfile.countDocuments({
-            ...filterCriteria,
-        });
-
-        const totalPages = Math.ceil(total / limit);
-        const company = await shortlisted.findOne({ companyid });
-        const SLcandidates = company ? company.candidates.map(elem=>elem.candidateId) : [];
-
-        userdata.forEach((data) => {
-            data.skills = [...new Set(data.skills)];
-        });
-        userdata.sort((a, b) => b.skills.length - a.skills.length);
-
-        const response = userdata.map((elem) => ({
-            ...elem.toObject(),
-            isshortlisted: SLcandidates.includes(elem._id.toString())
-        }));
-
-        if (userdata.length > 0) {
-            res.json({
-                data: response,
-                totalPages,
-                currentPage: parseInt(page, 10),
-                total,
-            });
+        const jobs = await JobsModel.find();
+        if (jobs.length > 0) {
+            res.json(jobs);
         } else {
-            res.status(200).json({
-                data: [],
-                totalPages: 0,
-                currentPage: parseInt(page, 10),
-                total: 0,
-            });
+            res.status(404).send({ msg: "Jobs not found", success: false });
         }
     } catch (error) {
         console.error(error);
-        if (error.name === "JsonWebTokenError") {
-            return res.status(401).json({ msg: "Invalid or missing JWT", error });
-        }
         res.status(500).json({ msg: "Internal server issue", error });
     }
 };
@@ -383,90 +286,159 @@ const sendjobposts = async (req, res) => {
     }
 }
 
-const sendjobdata = async (req, res) => {
-    const { id } = req.params;
-    const job = await JobsModel.findById(id)
-    const appliedusernames = (job.appliedCandidatesID || []);
-    console.log(appliedusernames)
-    const candidates = await UserProfile.find({ username: { $in: appliedusernames } })
-    console.log("candidates",candidates)
-    const short=await shortlisted.findOne({jobid:id});
-    console.log("kjadf",short.candidates&&short.candidates || [])
-    res.json({ candidates: candidates,shortlistedcandidates:short.candidates, msg: "Candidates data recieved successfully!" });
+const getCompanyDetails = async (req, res) => {
+    try {
+        const companyusername = req.params.companyusername;
+        const job = await JobsModel.find({ companyusername: companyusername });
+        res.json(job);
+        // res.send("Hello");
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: "Internal server issue", error });
+    }
+
+
 }
 
-// const sendjobdata = async (req, res) => {
-//     try {
-//       const { id } = req.params;
-//       const job = await JobsModel.findById(id);
-//       const appliedusernames = job.appliedCandidatesID || [];
-//       console.log("Applied Usernames:", appliedusernames);
-  
-//       // Log all usernames in the UserProfile collection for comparison
-//       const allUsernames = await UserProfile.find({}, { username: 1, _id: 0 });
-//       console.log("All Usernames in DB:", allUsernames);
-  
-//       const candidates = await UserProfile.find({ username: { $in: appliedusernames } });
-//       console.log("Matched Candidates:", candidates);
-  
-//       // Fetch shortlisted candidates
-//       const short = await shortlisted.findOne({ jobid: id });
-//       console.log("Shortlisted Candidates:", short?.candidates || []);
-  
-//       res.json({
-//         candidates: candidates,
-//         shortlistedcandidates: short?.candidates || [],
-//         msg: "Candidates data received successfully!",
-//       });
-//     } catch (error) {
-//       console.error("Error in sendjobdata:", error);
-//       res.status(500).json({ msg: "An error occurred", error: error.message });
-//     }
-//   };
-  
-const JobApply = async (req, res) => {
+const putJobApplication = async (req, res) => {
     try {
-        const { jobid } = req.body;
-        const authHeader = req.headers.authorization;
-        if (!authHeader || !authHeader.startsWith("Bearer ")) {
-            return res.status(401).json({ msg: "No token provided", success: false });
-        }
-        const jwtToken = authHeader.split(' ')[1];
-        const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET);
-        const id = decoded._id;
-        const job = await JobsModel.findById(jobid);
-        if (!job) {
-            return res.status(404).json({ msg: "Job not found", success: false });
-        }
-        console.log(job);
-        if (job.appliedCandidatesID.includes(id)) {
-            return res
-                .status(400)
-                .json({ msg: "You have already applied for this job", success: false });
-        }
-        job.appliedCandidatesID.push(id);
-        await job.save();
-        return res
-            .status(200)
-            .json({ msg: "Successfully applied for the job", success: true });
+        const newJobDetail = req.body;
+
+
+        await JobsModel.findByIdAndUpdate(newJobDetail._id, newJobDetail, { new: true });
+        res.status(201).json({ msg: "Job Application submitted successfully!", success: true });
     } catch (error) {
-        return res
-            .status(500)
-            .json({ msg: "Internal Server Issues", success: false });
+        console.error(error);
+        res.status(500).json({ msg: "Internal server issue ", error });
     }
 }
+
+
+const getUser = async (req, res) => {
+    try {
+        const authHeader = req.headers['authorization']; // OR req.get('Authorization')
+    
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return res.status(401).json({ message: 'Authorization token missing or invalid' });
+        }
+    
+        // Extract the token
+        const token = authHeader.split(' ')[1]; // Split "Bearer <token>"
+    
+        // Do something with the token (e.g., verify it)
+        console.log('Token received:', token);
+        
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        
+        // Access the username from decoded token
+        
+        
+        // Respond with the decoded information (e.g., username)
+        res.status(200).json({ message: 'User verified', username: decoded.name });
+        
+    } catch (error) {
+        console.error(error);
+        
+        // Handle specific errors
+        if (error.name === 'TokenExpiredError') {
+            return res.status(401).json({ message: 'Token expired, please login again' });
+        }
+        
+        res.status(500).json({ msg: "Internal server issue", error });
+    }
+};
+
+const saveJobBookmark = async (req, res) => {
+    const { username, jobDetails } = req.body;
+    try {
+      const update = {
+        $addToSet: { 
+          savedJobs: {
+            jobId: jobDetails.companyusername,
+            jobProfile: jobDetails.jobprofile,
+            company: jobDetails.company
+          }
+        }
+      };
+      
+      await UserJobInteraction.findOneAndUpdate(
+        { username }, 
+        update, 
+        { upsert: true, new: true }
+      );
+      
+      res.status(200).json({ message: 'Job bookmarked successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to bookmark job' });
+    }
+  };
+  
+  const removeJobBookmark = async (req, res) => {
+    const { username, jobId } = req.body;
+    try {
+      await UserJobInteraction.findOneAndUpdate(
+        { username },
+        { $pull: { savedJobs: { jobId } } }
+      );
+      res.status(200).json({ message: 'Job removed from bookmarks' });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to remove bookmark' });
+    }
+  };
+  
+  const applyToJob = async (req, res) => {
+    const { username, jobDetails } = req.body;
+    try {
+      await UserJobInteraction.findOneAndUpdate(
+        { username },
+        { 
+          $pull: { savedJobs: { jobId: jobDetails.companyusername } },
+          $addToSet: { 
+            appliedJobs: {
+              jobId: jobDetails.companyusername,
+              jobProfile: jobDetails.jobprofile,
+              company: jobDetails.company
+            }
+          }
+        },
+        { upsert: true, new: true }
+      );
+      
+      res.status(200).json({ message: 'Job application submitted' });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to apply to job' });
+    }
+  };
+  
+  const getUserJobInteractions = async (req, res) => {
+    const { username } = req.query;
+    try {
+      const userInteractions = await UserJobInteraction.findOne({ username });
+      res.status(200).json({
+        savedJobs: userInteractions?.savedJobs || [],
+        appliedJobs: userInteractions?.appliedJobs || []
+      });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch job interactions' });
+    }
+  };
+
+
 module.exports = {
-    loginJS,
-    signupJS,
-    loginE,
-    signupE,
+
     PostJob,
     sendJSdata,
     getUserProfile,
+    getJobs,
+    getCompanyDetails,
+    putJobApplication,
+    getUser,
+    saveJobBookmark,
+    removeJobBookmark,
+    getUserJobInteractions,
     shortlistCandidate,
     searchcandidates,
     sendjobposts,
     sendjobdata,
-    JobApply,
-    reachoutcandidates
+    reachoutcandidates,
 }

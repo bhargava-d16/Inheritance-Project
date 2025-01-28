@@ -30,7 +30,7 @@ const JobApplications = () => {
   };
   const handleAction = async (action, username) => {
     try {
-      const jwtToken = localStorage.getItem('jwtToken');
+      const jwtToken = localStorage.getItem('accessToken');
       const response = await axios.post(
         `http://localhost:8080/EDashboard/myjobs/${id}`,
         { username, id, action },

@@ -10,14 +10,14 @@ const Userprofile=new Schema({
     },
     name:{
         type:String,
-
+        
     },
     place:{
         type:String,
     },
     email:{
         type:String,
-        required:true,
+        // required:true,
     },
     phone:{
         type:String,
@@ -41,8 +41,8 @@ const Userprofile=new Schema({
         type:String,
     },
     opentooffers:{
-        type:Boolean,
-        default:true
+        type:String,
+        default: "yes"
     },
     DOB:{
         type: Date

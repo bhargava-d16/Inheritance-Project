@@ -15,7 +15,7 @@ const EMain = () => {
 
     const fetchJSdata = async (filterValue = filter, page = currPage) => {
         try {
-            const jwtToken = localStorage.getItem('jwtToken');
+            const jwtToken = localStorage.getItem('accessToken');
             setLoading(true);
 
             const response = await axios.get('http://localhost:8080/EDashboard', {
@@ -31,6 +31,7 @@ const EMain = () => {
             });
 
             const { data, totalPages, currentPage } = response.data;
+            console.log(data);
             setData(data);
             setFdata(data);
             setTotalPages(totalPages);

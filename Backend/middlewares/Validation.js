@@ -25,13 +25,6 @@ const loginValidation=(req,res,next)=>{
     next();
 }
 
-// const AuthenticateUser=(req,res,next)=>{
-//     const token = req.header('Authorization')?.split(' ')[1]; 
-//     console.log(token);
-//     next();
-
-// }
-
 module.exports={
     loginValidation,
     signupValidation

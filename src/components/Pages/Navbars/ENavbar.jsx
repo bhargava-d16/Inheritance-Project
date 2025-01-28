@@ -9,6 +9,7 @@ const ENavbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   useEffect(() => {
     const storedUsername = localStorage.getItem('username') || 'defaultUser';
+    console.log(storedUsername)
     setUsername(storedUsername);
   }, []);
 

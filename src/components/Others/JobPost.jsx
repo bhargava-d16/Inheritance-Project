@@ -20,7 +20,7 @@ const JobPost = () => {
         setdetails({ ...details, [e.target.name]: e.target.value })
     }
 
-    const jwtToken = localStorage.getItem("jwtToken")
+    const jwtToken = localStorage.getItem("accessToken")
     const handleSubmit = async () => {
         console.log(details);
         try {

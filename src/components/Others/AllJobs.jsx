@@ -11,7 +11,7 @@ const AllJobs = () => {
   const [search, setsearch] = useState('')
 
   const fetchJobs = async () => {
-    const jwtToken = localStorage.getItem('jwtToken');
+    const jwtToken = localStorage.getItem('accessToken');
     try {
       const response = await axios.get('http://localhost:8080/EDashboard/myjobs', {
         headers: {
@@ -64,7 +64,7 @@ const AllJobs = () => {
         </button>
 
       </div>
-      <table className='Jobstable'>
+      <table className='Jobstable mt-5'>
         <thead>
           <tr>
             <th>Job Title</th>
