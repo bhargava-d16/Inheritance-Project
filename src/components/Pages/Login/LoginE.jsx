@@ -38,7 +38,8 @@ const Loginemp = () => {
       if (response.data && response.data.token) {
         console.log("skduf",response.data);
         localStorage.setItem('accessToken', response.data.token);
-        localStorage.setItem('username',response.data.username)
+        localStorage.setItem('username',response.data.username);
+        localStorage.setItem('User','Company');
         
 
         dispatch({type:'LOGIN',payload:response.data})

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FiUser } from 'react-icons/fi';
 import { FaSuitcase, FaTrophy } from 'react-icons/fa';
 import { MdWorkOutline } from 'react-icons/md';
@@ -7,6 +7,7 @@ import { MdWorkOutline } from 'react-icons/md';
 const ENavbar = () => {
   const [username, setUsername] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const navigate=useNavigate();
   useEffect(() => {
     const storedUsername = localStorage.getItem('username') || 'defaultUser';
     console.log(storedUsername)
@@ -14,9 +15,16 @@ const ENavbar = () => {
   }, []);
 
   const toggleSidebar = () => {
-    setIsSidebarOpen(prev=>!prev);
+    setIsSidebarOpen(prev => !prev);
     console.log(isSidebarOpen);
   };
+  const handleClick=()=>{
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('username');
+    localStorage.removeItem('User');
+    navigate('/')
+
+  }
 
   return (
     <div className="Enavbar">
@@ -35,10 +43,14 @@ const ENavbar = () => {
           <FaSuitcase /> My Jobs
         </Link>
       </div>
-      <div className="imgcontainer">
-        <Link to={`/company/${username}`}>
-          <FiUser className="mr-3" size={30} color="whitesmoke" />
-        </Link>
+      <div className='flex w-[13%] justify-between align-middle '>
+        <div><button onClick={handleClick}>Log Out</button></div>
+        <div className="imgcontainer">
+          <Link to={`/company/${username}`}>
+            <FiUser className="mr-3" size={30} color="whitesmoke" />
+          </Link>
+        </div>
+
       </div>
       {isSidebarOpen && (
         <div className="sidebar">

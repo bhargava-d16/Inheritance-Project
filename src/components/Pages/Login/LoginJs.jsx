@@ -40,10 +40,10 @@ const Loginuser = () => {
       // Check if response.data exists and contains the token
       if (response.data && response.data.token) {
         console.log(response);
-        localStorage.setItem('username',response.data.username)
+        localStorage.setItem('username',response.data.username);
         localStorage.setItem('accessToken', response.data.token);
+        localStorage.setItem('User','Candidate');
         
-
         dispatch({type:'LOGIN',payload:response.data.token})
         toast.success('Login successful!');
         

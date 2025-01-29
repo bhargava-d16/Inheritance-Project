@@ -12,39 +12,40 @@ const UserNav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [notifications, setnotifications] = useState([])
   const navigate = useNavigate();
-  const {user}=useAuthContext();
+  const { user } = useAuthContext();
   const { logout } = useLogout();
   // Mock notifications data
-  const notifications = [
-    { id: 1, message: 'New job matching your profile', time: '2h ago', isNew: true },
-    { id: 2, message: 'Application status updated', time: '1d ago', isNew: false },
-    { id: 3, message: 'Interview scheduled tomorrow', time: '12h ago', isNew: true }
-  ];
- 
+
+
   const getusername = async () => {
-    
+
     const token = localStorage.getItem('accessToken');
     if (token) {
       try {
-        const  response = await axios.get("http://localhost:8080/user", {
+        const response = await axios.get("http://localhost:8080/user", {
           headers: {
             "Authorization": `Bearer ${token}`
           }
         })
-        setUsername(response.data.username)
-          sharedUsername=response.data.username;
+        if (response.data) {
+          setUsername(response.data.username)
+          sharedUsername = response.data.username;
+          console.log(response.data.notifications)
+          setnotifications(response.data.notifications);
+        }
       } catch (error) {
         console.error("Invalid token:", error);
       }
     }
   }
-  const handlenotifications=()=>{
+  const handlenotifications = () => {
     console.log("notifiactions")
   }
   useEffect(() => {
     getusername();
-    
+
   }, []);
 
   const handleNavigation = (path) => {
@@ -56,7 +57,7 @@ const UserNav = () => {
       setIsLoading(false);
     }, 300);
   };
- 
+
   return (
     <>
       {/* Loading Spinner */}
@@ -103,9 +104,9 @@ const UserNav = () => {
                   className="p-2 text-white hover:bg-[#1e4ea3] rounded-full relative"
                 >
                   <Bell size={20} onClick={handlenotifications} />
-                  {notifications.some(n => n.isNew) && (
+                  
                     <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                  )}
+
                 </button>
 
                 {showNotifications && (
@@ -114,27 +115,42 @@ const UserNav = () => {
                       <h3 className="font-semibold text-gray-800">Notifications</h3>
                     </div>
                     <div className="max-h-96 overflow-y-auto">
-                      {notifications.map(notification => (
-                        <div
-                          key={notification.id}
-                          className="p-3 border-b hover:bg-gray-50 transition-colors"
-                        >
-                          <div className="flex items-start justify-between">
-                            <div>
-                              <p className="text-sm text-gray-800">{notification.message}</p>
-                              <span className="text-xs text-gray-500">{notification.time}</span>
+                      {notifications.length > 0 ? (
+                        notifications.map((notification) => (
+                          <div
+                            key={notification._id}
+                            className={`p-3 border-b hover:bg-gray-50 transition-colors ${!notification.isRead ? 'bg-blue-50' : ''
+                              }`}
+                          >
+                            <div className="flex items-start justify-between">
+                              <div>
+                                {/* Notification Message */}
+                                <p className="text-sm text-gray-800">{notification.message}</p>
+
+                                {/* Formatted Timestamp */}
+                                <span className="text-xs text-gray-500">
+                                  {new Date(notification.timestamp).toLocaleString()}
+                                </span>
+                              </div>
+
+                              {/* Unread Badge */}
+                              {!notification.isRead && (
+                                <span className="px-2 py-1 text-xs font-semibold text-white bg-[#133E87] rounded-full">
+                                  New
+                                </span>
+                              )}
                             </div>
-                            {notification.isNew && (
-                              <span className="px-2 py-1 text-xs font-semibold text-white bg-[#133E87] rounded-full">
-                                New
-                              </span>
-                            )}
                           </div>
+                        ))
+                      ) : (
+                        <div className="p-3 text-sm text-gray-500">
+                          No notifications available.
                         </div>
-                      ))}
+                      )}
                     </div>
                   </div>
                 )}
+
               </div>
 
               {/* Profile Menu */}
@@ -184,5 +200,5 @@ const UserNav = () => {
   );
 };
 
-export  {sharedUsername}
+export { sharedUsername }
 export default UserNav;

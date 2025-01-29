@@ -1,172 +1,4 @@
 
-// //with icons and profile
-// import React, { useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import { User, ChevronLeft, ChevronRight, MapPin, Briefcase, IndianRupee, ExternalLink } from 'lucide-react';
-
-// const UserPage = ({ jobs, loading }) => {
-//   const navigate = useNavigate();
-//   const [currentIndex, setCurrentIndex] = useState(0);
-  
-//   const username = 'Kartik';
-//   // Check if jobs is defined and has data
-//   const recentJobs = jobs && jobs.length > 0 ? jobs.slice(0, 10) : [];
-
-//   const handlePrevious = () => {
-//     setCurrentIndex((prevIndex) =>
-//       prevIndex === 0 ? recentJobs.length - 3 : prevIndex - 3
-//     );
-//   };
-  
-//   const handleNext = () => {
-//     setCurrentIndex((prevIndex) =>
-//       prevIndex === recentJobs.length - 3 ? 0 : prevIndex + 3
-//     );
-//   };
-
-//   const handleApply = (companyusername) => {
-//     navigate(`/user/Jobs/${companyusername}`);
-//   };
-
-//   const formatSalary = (salary) => {
-//     if (!salary) return 'Not Disclosed';
-//     const inLakhs = salary / 100000;
-//     return `${inLakhs.toFixed(2)} L/year`;
-//   };
-
-//   return (
-//     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-//       <div 
-//         className="min-h-screen"
-//         style={{
-//           backgroundImage: `
-//             linear-gradient(to right, #e5e7eb 1px, transparent 1px),
-//             linear-gradient(to bottom, #e5e7eb 1px, transparent 1px)
-//           `,
-//           backgroundSize: '4rem 4rem'
-//         }}
-//       >
-
-//        {/* {Profile Section} */}
-//      <div className="bg-white border-b">
-//         <div className="max-w-7xl mx-auto px-4 py-6">
-//             <div className="flex items-center gap-4">
-//                     <User size={24} color="white"/>
-//                     </div>
-//                     <div>
-//                         <h1 className="text-2xl font-semibold" style={{ color: '#133E87' }}>
-//                             Welcome, {username}
-//                             </h1>
-//                             <p className="text-gray-600">
-//                                 Here are some of the latest job opportunities for you
-//                                 </p>
-//                             </div>
-//                         </div>
-//                   </div>
-
-//         {/* {Latest Opportunities Section} */}
-//     <div className="max-w-7xl mx-auto px-4 py-6">
-//     <div className="bg-white p-6 rounded-lg shadow-sm">
-//       <div className="flex justify-between items-center mb-6">
-//         <h2 className="text-xl font-semibold" style={{ color: '#133E87' }}>
-//           Latest Opportunities
-//         </h2>
-//         <button
-//           onClick={() => navigate('/user/Jobs')}
-//           className="text-sm text-[#133E87] hover:underline"
-//         >
-//           View All
-//           <ExternalLink size={16} className="inline-block ml-1" />
-//         </button>
-//       </div>
-
-//       <div className="relative">
-//         {/* Slider Controls */}
-//         <button
-//           onClick={handlePrevious}
-//           className="absolute -left-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white shadow-md z-10 flex items-center justify-center"
-//           style={{ color: '#133E87' }}
-//         >
-//           <ChevronLeft size={20} />
-//         </button>
-//         <button
-//           onClick={handleNext}
-//           className="absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white shadow-md z-10 flex items-center justify-center"
-//           style={{ color: '#133E87' }}
-//         >
-//           <ChevronRight size={20} />
-//         </button>
-
-//         {/* Cards Container */}
-//         <div className="overflow-hidden">
-//   <div
-//     className="flex transition-transform duration-1000 ease-in-out" // Slower transition
-//     style={{
-//       transform: `translateX(-${currentIndex * 25}%)`, // Adjust for showing 4 cards at a time
-//       width: `${recentJobs.length * 25}%`, // Adjust for 4 cards per view
-//     }}
-//   >
-//     {loading ? (
-//       <div className="w-full flex-shrink-0 px-2 text-center">
-//         <p>Loading jobs...</p>
-//       </div>
-//     ) : recentJobs.length === 0 ? (
-//       <div className="w-full flex-shrink-0 px-2 text-center">
-//         <p>No recent job listings available</p>
-//       </div>
-//     ) : (
-//       recentJobs.map((job) => (
-//         <div
-//           key={job.companyusername}
-//           className="w-1/4 flex-shrink-0 px-2" // Adjusted to fit 4 cards per view
-//         >
-//           <div className="bg-white border rounded-lg p-4 h-full hover:shadow-md transition-shadow">
-//             <div className="flex flex-col h-full">
-//               <div className="mb-2">
-//                 <h3 className="font-semibold text-lg truncate" style={{ color: '#133E87' }}>
-//                   {job.jobprofile}
-//                 </h3>
-//                 <p className="text-gray-600 text-sm truncate">{job.company}</p>
-//               </div>
-
-//               <div className="flex-grow">
-//                 <div className="grid grid-cols-2 gap-2 text-sm text-gray-600 mb-4">
-//                   <div className="truncate flex items-center gap-1">
-//                     <MapPin size={14} className="text-gray-400"/> {job.location}
-//                   </div>
-//                   <div className="truncate flex items-center gap-1">
-//                     <Briefcase size={14}className="text-gray-400"/>{job.experience}
-//                   </div>
-//                   <div className="col-span-2 truncate flex items-center gap-1">
-//                     <IndianRupee size={14} className="text-gray-400"/> {formatSalary(job.salary)}
-//                   </div>
-//                 </div>
-//               </div>
-
-//               <button
-//                 onClick={() => handleApply(job.companyusername)}
-//                 className="w-full py-2 px-4 text-sm rounded-md text-white transition-colors hover:bg-[#608BC1]"
-//                 style={{ backgroundColor: '#133E87' }}
-//               >
-//                 Apply Now
-//                 <ExternalLink size={16} className="inline-block ml-1" />
-//               </button>
-//             </div>
-//           </div>
-//         </div>
-//       ))
-//     )}
-//              </div>
-//            </div>
-//         </div>
-//       </div>
-//     </div>
-//    </div>
-//  </div>
-//   );
-// };
-
-// export default UserPage;
 
 
 import React, { useEffect, useState } from 'react';
@@ -184,14 +16,9 @@ const UserPage = ({ jobs, loading }) => {
   const [savedJobs,setSavedJobs] = useState([]);
   const [appliedJobs, setAppliedJobs] = useState([]);
   
-  const username = 'Kartik';
+  const username = localStorage.getItem('username').toUpperCase();
   const recentJobs = jobs && jobs.length > 0 ? jobs.slice(0, 10) : [];
 
-  // Mock data 
-  // const savedJobs = [
-  //   { id: 1, title: 'Software Engineer', company: 'Oracle', savedDate: '2025-01-15' },
-  //   { id: 2, title: 'Product Manager', company: 'Hilti', savedDate: '2025-01-16' }
-  // ];
   useEffect(() =>{
 
     if (!localStorage.getItem('jobBookmarks')) {
@@ -286,7 +113,7 @@ const UserPage = ({ jobs, loading }) => {
               <User size={24} className="text-[#133E87] mr-4"/>
               <div>
                 <h1 className="text-2xl font-semibold text-[#133E87]">
-                  Welcome, {username}
+                  Welcome {username}
                 </h1>
                 <p className="text-gray-600">
                   Here are some of the latest job opportunities for you

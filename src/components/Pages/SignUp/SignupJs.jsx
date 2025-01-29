@@ -40,11 +40,12 @@ const nameChange=(event)=>{
           console.log(response.data);
           if (response.data && response.data.token) {
                             
-                            localStorage.setItem('accessToken',response.data.token)
+                            localStorage.setItem('accessToken',response.data.token);
+                            localStorage.setItem('username',response.data.username);
+                            localStorage.setItem('User','Candidate');
+
                             dispatch({type:'LOGIN',payload:response.data})
                             toast.success("User registered successfully!");
-                            // Add navigation after successful login
-                            // navigate('/dashboard'); // Adjust the route as needed
                           } else {
                             toast.error('Invalid response from server');
                             console.error('Invalid response structure:', response.data);

@@ -8,6 +8,8 @@ export const useLogout = () => {
     const logout = () => {
         // Remove user from storage
         localStorage.removeItem('accessToken');
+        localStorage.removeItem('User');
+        localStorage.removeItem('username');
         
         // Dispatch logout action
         dispatch({ type: 'LOGOUT' });

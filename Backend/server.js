@@ -61,6 +61,8 @@ app.post("/login/user" ,loginuser)
 app.post("/register/company", registeremp)                      
 
 
+// app.post("/scheduleMeet",scheduleMeet);
+
 // Start server only after DB connection
 app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
