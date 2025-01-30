@@ -7,7 +7,7 @@ import { MdWorkOutline } from 'react-icons/md';
 const ENavbar = () => {
   const [username, setUsername] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   useEffect(() => {
     const storedUsername = localStorage.getItem('username') || 'defaultUser';
     console.log(storedUsername)
@@ -18,7 +18,7 @@ const ENavbar = () => {
     setIsSidebarOpen(prev => !prev);
     console.log(isSidebarOpen);
   };
-  const handleClick=()=>{
+  const handleClick = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('username');
     localStorage.removeItem('User');
@@ -43,25 +43,31 @@ const ENavbar = () => {
           <FaSuitcase /> My Jobs
         </Link>
       </div>
-      <div className='flex w-[13%] justify-between align-middle '>
-        <div><button onClick={handleClick}>Log Out</button></div>
+      <div className='flex items-center justify-between gap-2'>
+        <button
+          onClick={handleClick}
+          className="px-3 py-2  text-white rounded-md  hover:text-black transition duration-300"
+        >
+          Log Out
+        </button>
         <div className="imgcontainer">
-          <Link to={`/company/${username}`}>
-            <FiUser className="mr-3" size={30} color="whitesmoke" />
+          <Link to={`/company/${username}`} className="flex items-center">
+            <FiUser className="mr-3 cursor-pointer" size={30} color="whitesmoke" />
           </Link>
         </div>
-
       </div>
-      {isSidebarOpen && (
-        <div className="sidebar">
-          <button className="close-btn" onClick={toggleSidebar}>&times;</button>
-          <Link to="/EDashboard" onClick={toggleSidebar}>Logo</Link>
-          <Link to="/EDashboard/jobposting" onClick={toggleSidebar}>Job Posting</Link>
-          <Link onClick={toggleSidebar}>Skill Assesment</Link>
-          <Link to="/EDashboard/myjobs" onClick={toggleSidebar}>My Jobs</Link>
-        </div>
-      )}
-    </div>
+      {
+        isSidebarOpen && (
+          <div className="sidebar">
+            <button className="close-btn" onClick={toggleSidebar}>&times;</button>
+            <Link to="/EDashboard" onClick={toggleSidebar}>Logo</Link>
+            <Link to="/EDashboard/jobposting" onClick={toggleSidebar}>Job Posting</Link>
+            <Link onClick={toggleSidebar}>Skill Assesment</Link>
+            <Link to="/EDashboard/myjobs" onClick={toggleSidebar}>My Jobs</Link>
+          </div>
+        )
+      }
+    </div >
   );
 };
 

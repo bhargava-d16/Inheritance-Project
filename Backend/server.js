@@ -7,6 +7,7 @@ const { connectDB, createUser } = require("./models/db");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
+
 const {
   searchcandidates,
   shortlistCandidate,
@@ -26,7 +27,13 @@ const {
   getUserAssets,
   saveNewProfilePic,
   saveNewCompanyPic,
+  markasReadfunc
 } = require("./controllers/Logic");
+
+
+
+// const { loginValidation, signupValidation } = require("./middlewares/Validation");
+// const {  searchcandidates,shortlistCandidate,sendjobposts,sendjobdata,reachoutcandidates,getUserProfile,sendJSdata,PostJob,getJobs,getCompanyDetails,putJobApplication,getUser} = require("./controllers/Logic");
 
 const registeruser = require("./controllers/registeruser");
 const registeremp = require("./controllers/registeremp");
@@ -68,11 +75,12 @@ app.put("/company/:username", saveCompanyProfile);
 app.get("/jobs", getJobs);
 app.get("/jobs/:companyusername", getCompanyDetails);
 app.put("/jobs/:companyusername", putJobApplication);
-app.get("/user", getUser);
-app.post("/register/user", registeruser);
-app.post("/login/company", loginemp);
-app.post("/login/user", loginuser);
-app.post("/register/company", registeremp);
+app.get("/user",getUser);
+app.post("/register/user", registeruser) 
+app.post("/login/company", loginemp)
+app.post("/login/user" ,loginuser) 
+app.post("/register/company", registeremp)  
+app.put('/user',markasReadfunc)                    
 app.get("/userassets/:username", getUserAssets);
 app.post(
   "/saveprofilepic/:username",
@@ -84,6 +92,7 @@ app.post(
   upload.single("companypic"),
   saveNewCompanyPic
 );
+
 
 // app.post("/scheduleMeet",scheduleMeet);
 

@@ -439,12 +439,17 @@ const getUser = async (req, res) => {
 
     const token = authHeader.split(' ')[1];
 
-    console.log('Token received:', token);
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(decoded.name)
+
     const user = await UserProfile.findOne({ username: decoded.name })
-    console.log(user)
+    user.notifications = user.notifications && user.notifications.sort((a, b) => {
+      if (a.isRead == b.isRead) {
+        return new Date(b.createdAt) - new Date(a.createdAt); 
+      }
+      return a.isRead ? 1 : -1; 
+    });
+    await user.save();
     res.status(200).json({ message: 'User verified', username: decoded.name, notifications: user.notifications });
 
   } catch (error) {
@@ -608,24 +613,20 @@ const saveNewCompanyPic = async (req , res) => {
 }
 
 
-// const scheduleMeet = async (req,res) => {
-//   try {
-//     const { meetingName, companyu, candidateu } = req.body;
-//     console.log(3,meetingName, companyu, candidateu);
+const markasReadfunc = async (req, res) => {
+  const { notificationId, username } = req.body;
+  try {
+    console.log(notificationId, username)
+    const user = await UserProfile.findOne({ username: username })
+    console.log(user)
+    const notification = user.notifications && user.notifications.find(elem => elem._id == notificationId)
 
-//     const meetingId = `${companyu}-${Date.now()}`;
-//     console.log("MID",meetingId);
-//     const expirationTime = Math.floor(Date.now() / 1000) + 3600;
-//     const hostToken = RtcTokenBuilder.buildTokenWithUid(Appid, Customercertificate, meetingId, 1, RtcRole.PUBLISHER, expirationTime);
-//     const attendeeToken = RtcTokenBuilder.buildTokenWithUid(Appid, Customercertificate, meetingId, 2, RtcRole.SUBSCRIBER, expirationTime);
-//     console.log(2,hostToken, attendeeToken);
-
-//     const hostlink = `https://12980cc8f42fa8335d9a.vercel.app/${meetingId}?role=host&token=${hostToken}`;
-//     console.log(1,hostlink);
-//   } catch (error) {
-//     console.log("Error", error);
-//   }
-// }
+    notification.isRead = true;
+    await user.save();
+  } catch (error) {
+    res.status(500).json({ error: 'Failed marking as read' });
+  }
+}
 
 module.exports = {
 
@@ -650,6 +651,6 @@ module.exports = {
   getUserAssets,
   saveNewProfilePic,
   saveNewCompanyPic,
-  
+  markasReadfunc
 
 }

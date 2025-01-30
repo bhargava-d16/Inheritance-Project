@@ -16,8 +16,6 @@ const UserNav = () => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const { logout } = useLogout();
-  // Mock notifications data
-
 
   const getusername = async () => {
 
@@ -33,6 +31,7 @@ const UserNav = () => {
           setUsername(response.data.username)
           sharedUsername = response.data.username;
           console.log(response.data.notifications)
+          const noti = response.data.notifications;
           setnotifications(response.data.notifications);
         }
       } catch (error) {
@@ -47,6 +46,17 @@ const UserNav = () => {
     getusername();
 
   }, []);
+
+  const handleRead = async (notificationId) => {
+    console.log(notificationId);
+    const username = localStorage.getItem('username');
+    const response = await axios.put("http://localhost:8080/user", {
+      notificationId,
+      username
+    })
+
+
+  }
 
   const handleNavigation = (path) => {
     setIsMenuOpen(false);
@@ -79,9 +89,11 @@ const UserNav = () => {
           <div className="flex h-16 items-center justify-between">
             {/* Logo and Navigation Links */}
             <div className="flex items-center space-x-4">
-              <span className="text-2xl font-bold text-white pr-8 pl-2">
-                JobPortal
-              </span>
+              <Link to='/'>
+                <span className="text-2xl font-bold text-white pr-8 pl-2">
+                  JobPortal
+                </span>
+              </Link>
               <button
                 onClick={() => handleNavigation('/user')}
                 className="block px-4 py-2 text-sm text-white hover:bg-transparent underline-offset-4 hover:underline"
@@ -104,8 +116,8 @@ const UserNav = () => {
                   className="p-2 text-white hover:bg-[#1e4ea3] rounded-full relative"
                 >
                   <Bell size={20} onClick={handlenotifications} />
-                  
-                    <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+
+                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
 
                 </button>
 
@@ -128,9 +140,13 @@ const UserNav = () => {
                                 <p className="text-sm text-gray-800">{notification.message}</p>
 
                                 {/* Formatted Timestamp */}
-                                <span className="text-xs text-gray-500">
-                                  {new Date(notification.timestamp).toLocaleString()}
-                                </span>
+                                <div className='flex align-middle w-full'>
+                                  <span className="text-xs text-gray-500">
+                                    {new Date(notification.timestamp).toLocaleString()}
+                                  </span>
+                                  <span className={notification.isRead == true ? 'hidden' : 'bg-emerald-500 rounded-md font-mono text-sm relative left-12'}><button onClick={() => handleRead(notification._id)}>Mark as Read</button></span>
+
+                                </div>
                               </div>
 
                               {/* Unread Badge */}
