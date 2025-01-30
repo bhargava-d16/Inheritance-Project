@@ -4,38 +4,58 @@ const Schema = mongoose.Schema;
 const Userprofile = new Schema({
   username: {
     type: String,
-    required: true,
+    default:""
+
   },
   name: {
     type: String,
+    default:""
+    // required: true,
   },
   place: {
     type: String,
+    default:""
+
   },
   email: {
     type: String,
-    // required: true,
+    default:""
+
   },
   phone: {
     type: String,
+    default:""
+
   },
   education: {
     type: String,
+    default:""
+
   },
   workexperices: {
     type: String,
+    default:""
+
   },
   extracirrucular: {
     type: String,
+    default:""
+
   },
   academics: {
     type: String,
+    default:""
+
   },
   skills: {
     type: Array,
+    default:""
+
   },
   currentlyworking: {
     type: String,
+    default:""
+
   },
   opentooffers: {
     type: String,
@@ -47,7 +67,7 @@ const Userprofile = new Schema({
   notifications: [
     {
       type: {
-        type: String, 
+        type: String,
         // required: true,
       },
       message: {
@@ -68,3 +88,4 @@ const Userprofile = new Schema({
 
 const UserProfile = mongoose.model("userProfile", Userprofile);
 module.exports = UserProfile;
+//

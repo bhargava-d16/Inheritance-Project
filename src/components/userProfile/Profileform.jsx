@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import Button from "./buttons.jsx"
+import Button from "./Button.jsx"
 
 const UserProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -10,7 +10,7 @@ const UserProfile = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
   const { username } = useParams();
-
+  
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -85,12 +85,12 @@ const UserProfile = () => {
   if (!userProfile) return <p className="text-center text-[#133E87]">No user data found.</p>;
 
   return (
-    <div className="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6 mt-8 border border-[#CBDCEB]">
+    <div className="  w-50 bg-white shadow-lg rounded-lg p-6 mt-8 border border-[#CBDCEB]">
       <h2 className="text-2xl font-bold text-[#133E87] mb-4 text-center">Your Profile and Resume</h2>
 
       <div className="space-y-4">
         {Object.entries(userProfile)
-          .filter(([key]) => key !== "id" && key !== "_v")
+          .filter(([key]) => key !== "_id" && key !== "__v" && key!=="notifications")
           .map(([key, value]) => (
             <div key={key}>
               <label className="block text-[#133E87] font-medium capitalize">

@@ -10,24 +10,100 @@ const shortlisted = require("../models/shortlist");
 const companyprofile = require("../models/companyprofile");
 const reachouts = require("../models/reachoutSchema");
 
-const { RtcTokenBuilder, RtcRole } = require("agora-access-token")
+const { RtcTokenBuilder, RtcRole } = require("agora-access-token");
+const UserAssets = require("../models/userassets");
+const CompanyProfile = require("../models/companyprofile");
+const { uploadImage } = require("../services/cloudinary");
 const Appid = 'a981796abb0d459ab5372bcd21de1249';
 const Customercertificate = '91b6da55508c4f98a55a985748e925ab';
 
 
 const getUserProfile = async (req, res) => {
+
+
+
   try {
-    const username = req.params.username
-    const data = await UserProfile.findOne({ username: username })
-    if (!data) return res.status(404).json({ message: "User not found" });
-    res.json(data);
+      const username = req.params.username
+      const data = await UserProfile.findOne({ username: username })
+      if (!data) return res.status(404).json({ message: "User not found" });
+      res.json(data);
   }
   catch (error) {
 
-    res.status(500).json({ message: error.message, hello: 'sfghjk wertyu sdfgh' });
+      res.status(500).json({ message: error.message, hello: "gand mara madarchod" });
   }
+
+
 }
 
+const saveUserProfile = async (req, res) => {
+  try {
+      const username = req.params.username;
+      const updateData = req.body; // Data to update from request body
+
+      if (!username) {
+          return res.status(400).json({ message: "Username is required" });
+      }
+
+      const updatedUser = await UserProfile.findOneAndUpdate(
+          { username: username },
+          { $set: updateData },
+          { new: true }
+      );
+
+      if (!updatedUser) {
+          return res.status(404).json({ message: "User not found" });
+      }
+
+      res.json({ message: "Profile updated successfully", user: updatedUser });
+  } catch (error) {
+      console.error("Error updating user profile:", error);
+      res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+const getCompanyProfile = async (req, res) => {
+
+
+
+  try {
+      const username = req.params.username
+      const data = await CompanyProfile.findOne({ username: username })
+      if (!data) return res.status(404).json({ message: "User not found" });
+      res.json(data);
+  }
+  catch (error) {
+
+      res.status(500).json({ message: error.message, hello: "gand mara madarchod" });
+  }
+
+
+}
+const saveCompanyProfile = async (req, res) => {
+  try {
+      const username = req.params.username;
+      const updateData = req.body; // Data to update from request body
+
+      if (!username) {
+          return res.status(400).json({ message: "Username is required" });
+      }
+
+      const updatedUser = await CompanyProfile.findOneAndUpdate(
+          { username: username },
+          { $set: updateData },
+          { new: true }
+      );
+
+      if (!updatedUser) {
+          return res.status(404).json({ message: "User not found" });
+      }
+
+      res.json({ message: "Profile updated successfully", user: updatedUser });
+  } catch (error) {
+      console.error("Error updating user profile:", error);
+      res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 
 
 
@@ -92,6 +168,16 @@ const searchcandidates = async (req, res) => {
     });
   }
 };
+const createUserAssets = async (newUserName) => {
+  try {
+      const newUser = await UserAssets.create({ username: newUserName })
+      return newUser;
+
+  } catch (error) {
+      console.log("error creating profile", error.message)
+  }
+}
+
 
 
 const sendJSdata = async (req, res) => {
@@ -446,6 +532,81 @@ const getUserJobInteractions = async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch job interactions' });
   }
 };
+const getUserAssets = async (req , res) => {
+  try {
+      const username = req.params.username
+      console.log("USRNELKFGKDJF = " , username)
+      const data = await UserAssets.findOne({ username:username })
+      console.log(data);
+      if (!data) return res.status(404).json({ message: "User not found" });
+      res.json(data);
+  }
+  catch (error) {
+
+      res.status(500).json({ message: error.message });
+  }
+}
+
+const saveNewProfilePic = async (req , res) => {
+  const username = req.params.username;
+  try {
+      const filePath = req.file.path; // Path of the uploaded file on the server
+      const folder = "profile_pics"; // Cloudinary folder name
+  
+      const result = await uploadImage(filePath, folder, username);
+      
+      await UserAssets.findOneAndUpdate(
+          { username: username }, 
+          {
+            $set: {
+              profilepicurl: result.secure_url,
+            },
+          },
+          { upsert: true, new: true } 
+        );
+      res.status(200).json({
+        message: "Image uploaded successfully!",
+        imageUrl: result.secure_url,
+      });
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      res.status(500).json({
+        message: "Failed to upload image.",
+        error: error.message,
+      });
+    }
+}
+
+const saveNewCompanyPic = async (req , res) => {
+  const username = req.params.username;
+  try {
+      const filePath = req.file.path; // Path of the uploaded file on the server
+      const folder = "company_pics"; // Cloudinary folder name
+  
+      const result = await uploadImage(filePath, folder, username);
+      
+      await CompanyProfile.findOneAndUpdate(
+          { username: username }, 
+          {
+            $set: {
+              companypicurl: result.secure_url,
+            },
+          },
+          { upsert: true, new: true } 
+        );
+      res.status(200).json({
+        message: "Image uploaded successfully!",
+        imageUrl: result.secure_url,
+      });
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      res.status(500).json({
+        message: "Failed to upload image.",
+        error: error.message,
+      });
+    }
+}
+
 
 // const scheduleMeet = async (req,res) => {
 //   try {
@@ -471,6 +632,9 @@ module.exports = {
   PostJob,
   sendJSdata,
   getUserProfile,
+  saveUserProfile,
+  getCompanyProfile,
+  saveCompanyProfile,
   getJobs,
   getCompanyDetails,
   putJobApplication,
@@ -483,4 +647,9 @@ module.exports = {
   sendjobposts,
   sendjobdata,
   reachoutcandidates,
+  getUserAssets,
+  saveNewProfilePic,
+  saveNewCompanyPic,
+  
+
 }

@@ -47,6 +47,7 @@ const registeremp = async (req, res, next) => {
       email:formattedEmail,
     })
     await newcomapany.save();
+    
     console.log(newcomapany)
     res.status(200).json({
       message: "Employer registered successfully",

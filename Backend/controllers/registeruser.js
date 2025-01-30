@@ -3,6 +3,7 @@ const UserProfile = require('../models/userprofile');
 const bcrypt = require('bcrypt');
 const joi = require('joi');
 const jwt = require('jsonwebtoken');
+const UserAssets = require('../models/userassets');
 
 const registeruser = async (req, res, next) => {
     const { error: validationError } = validateUser(req.body);
@@ -42,6 +43,15 @@ const registeruser = async (req, res, next) => {
             username: formattedName,
             email:formattedEmail,
         });
+        await newUserProfile.save();
+
+        const newUserAssets = new UserAssets({
+            username: formattedName,
+            profilepicurl: "",
+            savedjobs: []
+             
+        });
+        await newUserAssets.save();
         await newUserProfile.save();
 
         res.status(200).json({ message: 'User registered successfully', token: accessToken,username:formattedName });

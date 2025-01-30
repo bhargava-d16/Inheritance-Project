@@ -23,6 +23,7 @@ import { AuthContextProvider } from './context/authcontext.jsx';
 import { Toaster} from 'react-hot-toast';
 import JobApplications from './components/Others/JobApplications.jsx';
 import AllJobs from './components/Others/AllJobs.jsx';
+import CompanyProfile from './pages/CompanyProfile.jsx';
 
 const router = createBrowserRouter([
   {
@@ -80,6 +81,10 @@ const router = createBrowserRouter([
     path: '/user/:username',
     element: <UserProfile />
 
+  },
+  {
+    path:'/company/:username',
+    element:<CompanyProfile/>
   },
   {
     path: '/user',
