@@ -9,13 +9,12 @@ const mongoose = require('mongoose');
 const shortlisted = require("../models/shortlist");
 const companyprofile = require("../models/companyprofile");
 const reachouts = require("../models/reachoutSchema");
-
+const invited = require("../models/invite");
 const { RtcTokenBuilder, RtcRole } = require("agora-access-token");
 const UserAssets = require("../models/userassets");
 const CompanyProfile = require("../models/companyprofile");
 const { uploadImage } = require("../services/cloudinary");
-const Appid = 'a981796abb0d459ab5372bcd21de1249';
-const Customercertificate = '91b6da55508c4f98a55a985748e925ab';
+
 
 
 const getUserProfile = async (req, res) => {
@@ -620,7 +619,6 @@ const markasReadfunc = async (req, res) => {
     const user = await UserProfile.findOne({ username: username })
     console.log(user)
     const notification = user.notifications && user.notifications.find(elem => elem._id == notificationId)
-
     notification.isRead = true;
     await user.save();
   } catch (error) {
@@ -628,6 +626,49 @@ const markasReadfunc = async (req, res) => {
   }
 }
 
+const sendinvite = async (req, res) => {
+  try {
+    const { cusername,username, date, time, link, jobId } = req.body;
+    console.log(cusername)
+    const newInvite = new invited({ username, date, time, link, jobId });
+    await newInvite.save();
+    const user=await UserProfile.findOne({username:username});
+    console.log(user.notifications)
+    notification = {
+
+      type: "Meeting Invite",
+      message: `Your meeting has been scheduled with ${cusername} on ${date} at time ${time}.`,
+      timestamp: new Date(),
+      isRead: false,
+    };
+    user.notifications.push(notification);
+    await user.save();
+    res.status(201).json({ message: "Invite saved successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to save invite" });
+  }
+};
+
+const scheduledmeets = async (req, res) => {
+  try {
+    const username = req.params.username;
+    const invites = await invited.find({ username }); 
+    if (!invites.length) {
+      return res.status(404).json({ message: 'No scheduled meets found' });
+    }
+   
+    const formattedInvites = invites.map(invite => ({
+          username: invite.username,
+          date: invite.date,
+          time: invite.time,
+          link: invite.link,
+    }));
+    
+    res.json(formattedInvites);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching scheduled meets', error });
+  }
+};
 module.exports = {
 
   PostJob,
@@ -651,6 +692,7 @@ module.exports = {
   getUserAssets,
   saveNewProfilePic,
   saveNewCompanyPic,
-  markasReadfunc
-
+  markasReadfunc,
+  scheduledmeets,
+  sendinvite,
 }

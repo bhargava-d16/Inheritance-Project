@@ -27,7 +27,9 @@ const {
   getUserAssets,
   saveNewProfilePic,
   saveNewCompanyPic,
-  markasReadfunc
+  markasReadfunc,
+  scheduledmeets,
+  sendinvite
 } = require("./controllers/Logic");
 
 
@@ -92,6 +94,8 @@ app.post(
   upload.single("companypic"),
   saveNewCompanyPic
 );
+app.post('/EDashboard/myjobs/:id/sendinvite',sendinvite)
+app.get("/scheduled-meets/:username", scheduledmeets);
 
 
 // app.post("/scheduleMeet",scheduleMeet);

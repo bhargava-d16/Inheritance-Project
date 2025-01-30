@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa"
-import { FaCheck, FaTimes } from "react-icons/fa";
+  
+import { FaCheck, FaVideo,FaTimes, FaPaperPlane,} from "react-icons/fa";
 
 const JobApplications = () => {
   const [candidates, setCandidates] = useState([]);
@@ -14,6 +15,13 @@ const JobApplications = () => {
   const [totalPage, settotalPage] = useState(1)
   const [limit, setlimit] = useState(6)
   const { id } = useParams();
+  const [showInviteForm, setShowInviteForm] = useState(false);
+  const [inviteData, setInviteData] = useState({
+    username: "",
+    date: "",
+    time: "",
+    link: "",
+  });
   const fetchCandidates = async () => {
     try {
       const response = await axios.get(`http://localhost:8080/EDashboard/myjobs/${id}`);
@@ -84,6 +92,58 @@ const JobApplications = () => {
       setcurrPage(currPage + 1);
     }
   }
+  const handleCreateRoom = (username) => {
+    window.open(
+      "https://450de5c462284eeb0b3e-bhargavas-projects-15243da0.vercel.app/create",
+      "_blank"
+    );
+  };
+
+  const handleSendInvite = (e, username) => {
+    e.preventDefault(); 
+    setInviteData({ ...inviteData, username }); 
+    setShowInviteForm(true);
+  };
+
+  const handleInviteSubmit = async (e) => {
+    e.preventDefault();
+    const u=localStorage.getItem('username');
+
+    try {
+      
+      const response = await axios.post(
+        `http://localhost:8080/EDashboard/myjobs/${id}/sendinvite`,
+        {
+          username: inviteData.username,
+          date: inviteData.date,
+          time: inviteData.time,
+          link: inviteData.link,
+          jobId: id,
+          cusername:u
+        }
+      );
+
+      
+      if (response.status === 201) {
+        
+        alert(
+          `Invitation sent to ${inviteData.username} and saved in the database.`
+        );
+        setShowInviteForm(false); 
+      } else {
+       
+        alert("Failed to send invite. Please try again.");
+      }
+    } catch (error) {
+      
+      console.error("Error saving invite:", error);
+      alert("Failed to send invite. Please try again.");
+    }
+  };
+
+  const handleCloseForm = () => {
+    setShowInviteForm(false);
+  };
 
   return (
     <div className="mt-5 mx-auto w-11/12 lg:w-3/4">
@@ -112,6 +172,8 @@ const JobApplications = () => {
               <th className="p-3 text-center">Experience</th>
               <th className="p-3 text-center">Actions</th>
               <th className="p-3 text-center">Profile</th>
+              <th className="p-3">Take Interview</th>
+               <th className="p-3">Send Invite</th>
             </tr>
           </thead>
           <tbody>
@@ -165,6 +227,25 @@ const JobApplications = () => {
                     View Profile
                   </Link>
                 </td>
+                
+                
+                <td className="p-3">
+                  <button
+                    onClick={() => handleCreateRoom(elem.username)}
+                    className="JSbutton flex items-center justify-center mx-auto space-x-2"
+                  >
+                    <FaVideo /> <span>Create Room</span>
+                  </button>
+                </td>
+                <td className="p-3">
+                  <button
+                    onClick={(e) => handleSendInvite(e, elem.username)}
+                    className="JSbutton flex items-center justify-center mx-auto space-x-2"
+                  >
+                    <FaPaperPlane /> <span>Click Here</span>
+                  </button>
+                </td>
+
               </tr>
             ))}
           </tbody>
@@ -184,7 +265,59 @@ const JobApplications = () => {
           <FaChevronRight></FaChevronRight>
         </button>
       </div>
+      {showInviteForm && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+            <h2 className="text-xl font-bold mb-4">
+              Send Invite to {inviteData.username}
+            </h2>
+            <form onSubmit={handleInviteSubmit}>
+              <input
+                type="date"
+                className="w-full p-2 border rounded mb-2"
+                required
+                onChange={(e) =>
+                  setInviteData({ ...inviteData, date: e.target.value })
+                }
+              />
+              <input
+                type="time"
+                className="w-full p-2 border rounded mb-2"
+                required
+                onChange={(e) =>
+                  setInviteData({ ...inviteData, time: e.target.value })
+                }
+              />
+              <input
+                type="text"
+                placeholder="Meeting Link"
+                className="w-full p-2 border rounded mb-2"
+                required
+                onChange={(e) =>
+                  setInviteData({ ...inviteData, link: e.target.value })
+                }
+              />
+              <div className="flex justify-between">
+                <button
+                  type="submit"
+                  className="JSbutton bg-blue-500 text-white px-4 py-2 rounded"
+                >
+                  Send
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCloseForm}
+                  className="JSbutton bg-gray-500 text-white px-4 py-2 rounded"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
+    
   );
 };
 export default JobApplications;
