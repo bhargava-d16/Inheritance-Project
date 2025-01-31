@@ -100,7 +100,7 @@ const UserNav = () => {
           <div className="flex h-16 items-center justify-between">
             {/* Logo and Navigation Links */}
             <div className="flex items-center space-x-4">
-              <Link to="/">
+              <Link className="no-underline" to="/">
                 <span className="text-2xl font-bold text-white pr-8 pl-2">JobPortal</span>
               </Link>
               <button onClick={() => handleNavigation("/user")} className="block px-4 py-2 text-sm text-white hover:bg-transparent underline-offset-4 hover:underline">

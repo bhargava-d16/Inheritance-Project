@@ -63,6 +63,7 @@ const Userprofile = new Schema({
   },
   DOB: {
     type: Date,
+    default:""
   },
   notifications: [
     {

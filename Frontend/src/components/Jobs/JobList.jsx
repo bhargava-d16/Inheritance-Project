@@ -52,9 +52,7 @@ const Jobs = ({ jobs, loading }) => {
 
   const handleApply = (jobid) => {
     console.log(jobid)
-    // const updatedAppliedJobs = [...appliedJobs, companyusername];
-    // setAppliedJobs(updatedAppliedJobs);
-    // localStorage.setItem('appliedJobs', JSON.stringify(updatedAppliedJobs));
+
     navigate(`/user/jobs/${jobid}`);
   };
 

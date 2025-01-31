@@ -1,7 +1,7 @@
 
 import React from 'react'
 import Card from './Card'
-
+import { Briefcase } from 'lucide-react'
 export default function Section1() {
     return (
         <main className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
@@ -16,18 +16,19 @@ export default function Section1() {
                         Here we are for Bridging the Gap Between Talent and Opportunity!
                     </h4>
                     <div className="space-y-4">
-                    <Card 
-                    icon="briefcase"
-                    title="Connect with Top Companies"
-                    description="Access thousands of job listings from industry-leading companies and start your journey to success."
-                    of='company'
-                    />
-                  <Card 
-                    icon="building"
-                    title="Find Your Dream Job Here!"
-                    description="Explore exciting opportunities and achieve your career goals with us. We connect top talent with leading companies."
-                    of='candidate'
-                  />
+                        <Card
+                        of='company'
+                            icon={<Briefcase />}
+                            title="Employer Job Portal Login"
+                            description="Manage your job postings, track applications, and connect with top talent. Enter your credentials to access the employer dashboard and streamline your recruitment process."
+                        />
+
+                        <Card
+                            icon="building"
+                            title="Find Your Dream Job Here!"
+                            description="Explore exciting opportunities and achieve your career goals with us. We connect top talent with leading companies."
+                            of='candidate'
+                        />
                     </div>
                 </div>
                 <div className="relative lg:w-1/2">

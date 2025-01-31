@@ -47,7 +47,7 @@ const JobCard = ({ job, onApply,appliedJobs }) => {
           
           <p className="text-gray-600 mt-1 flex items-center gap-2">
             <Briefcase size={16} className="text-gray-400" />
-            {job.company}
+            {job.companyusername}
           </p>
           
           <div className="flex flex-wrap gap-6 mt-4">

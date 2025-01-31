@@ -7,7 +7,7 @@ import {
   TrendingUp, Calendar, BookMarked
 } from 'lucide-react';
 import axios from 'axios';
-console
+
 const UserPage = ({ jobs, loading }) => {
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -31,13 +31,12 @@ const UserPage = ({ jobs, loading }) => {
       console.error("Error fetching data:", error);
     }
   };
-
   const jobStats = {
     applications: alljobs.length,
     interviews: interviews,
-    saved: savedJobs.length,
+    saved: (savedJobs && savedJobs.length) || 0, // Handles undefined or empty savedJobs
   };
-
+  
   const handlePrevious = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? alljobs.length - 3 : prevIndex - 3
@@ -51,7 +50,6 @@ const UserPage = ({ jobs, loading }) => {
   };
 
   const handleApply = (jobid) => {
-   
     navigate(`/user/Jobs/${jobid}`);
   };
 

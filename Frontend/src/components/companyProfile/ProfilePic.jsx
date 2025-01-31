@@ -1,6 +1,8 @@
+
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { FaEdit, FaUser, FaTrashAlt } from 'react-icons/fa';
+import { FaEdit, FaUser } from 'react-icons/fa';
 import { useParams } from "react-router-dom";
 
 const ProfilePic = () => {
@@ -8,16 +10,14 @@ const ProfilePic = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [editing, setEditing] = useState(false);
-  const [change, setChange] = useState(false);
-  const {username} = useParams();
+  const { username } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`/api/company/${username}`);
-        console.log(response.data)
-        setImg(response.data.companypicurl);
+        const response = await axios.get(`http://localhost:8080/userassets/${username}`);
+        setImg(response.data.profilepicurl);
       } catch (error) {
         setError(error.message || "Failed to fetch data.");
       } finally {
@@ -26,96 +26,112 @@ const ProfilePic = () => {
     };
 
     fetchData();
-  }, [change]);
+  }, [username]);
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
     setImg(selectedFile);
-  }
+  };
 
   const handleFileSave = async () => {
     if (img) {
       setLoading(true);
       const formData = new FormData();
-      formData.append("companypic", img);
+      formData.append("profilepic", img);
       formData.append("username", username);
+
       try {
-        const response = await axios.post(`/api/savecompanypic/${username}`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
+        const response = await axios.post(
+          `http://localhost:8080/saveprofilepic/${username}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
           }
-        });
-        console.log("Image uploaded:", response.data.companypicurl);
-        setImg(response.data.companypicurl)
+        );
+        setImg(response.data.url);
       } catch (error) {
         console.error("Upload failed:", error);
       } finally {
-        setLoading(false)
-        setEditing(false)
+        setLoading(false);
+        setEditing(false);
       }
     }
   };
 
-
-
   return (
-    <div className="w-72 h-72 bg-white shadow-lg mt-8 rounded-lg p-6 border border-[#CBDCEB] flex items-center justify-center flex-col">
-      {loading ? (
-        <p>Loading...</p>
-      ) : error ? (
-        <p>{error}</p>
-      ) : (
-        <>
-          {/* Profile Picture */}
-          <img
-            src={img}
-            alt="Profile Pic"
-            className="w-34 h-34 rounded-full object-cover mb-4"
-          />
-
-          {/* Edit Mode */}
-          {editing ? (
-            <div className="flex flex-col items-center">
-              <input
-                type="file"
-                name="companypic"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="w-36 h-10 p-2 text-sm border border-gray-300 rounded-lg mb-4"
-              />
-              <div className="flex flex-row justify-between items-center">
-                <button
-                  onClick={handleFileSave}
-                  className="bg-blue-600 text-white py-1 px-4 rounded-lg hover:bg-blue-700"
-                  disabled={loading}
-                >
-                  Save
-                </button>
-                <button
-                  onClick={() => setEditing(false)}
-                  className="bg-gray-300 text-black py-1 px-4 rounded-lg hover:bg-gray-400 ml-3"
-                  disabled={loading}
-
-                >
-                  Cancel
-                </button>
+    <div className="w-80 bg-white shadow-xl rounded-2xl p-8 border border-[#CBDCEB]">
+      <div className="flex flex-col items-center">
+        <div className="relative w-48 h-48 mb-6">
+          <div className="w-full h-full rounded-full overflow-hidden border-4 border-[#CBDCEB] shadow-lg">
+            {loading ? (
+              <div className="w-full h-full flex items-center justify-center bg-gray-50">
+                <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#2557a7] border-t-transparent"></div>
               </div>
+            ) : error ? (
+              <div className="w-full h-full flex items-center justify-center bg-gray-50">
+                <FaUser className="w-16 h-16 text-gray-300" />
+              </div>
+            ) : (
+              <img
+                src={typeof img === 'string' ? img : 'https://via.placeholder.com/200'}
+                alt="Profile"
+                className="w-full h-full object-cover"
+              />
+            )}
+          </div>
 
-            </div>
-          ) : (
-            <div className="object-bottom ml-48 mt-12 ">
+          {!editing && (
+            <button
+              onClick={() => setEditing(true)}
+              className="absolute bottom-2 right-2 p-3 bg-[#2557a7] text-white rounded-full shadow-lg"
+            >
+              <FaEdit className="w-5 h-5" />
+            </button>
+          )}
+        </div>
 
+        {editing && (
+          <div className="w-full space-y-4">
+            <label className="block">
+              <div className="bg-[#2557a7] text-white py-3 px-4 rounded-lg cursor-pointer hover:bg-[#1e4c9a] transition-colors duration-200 text-center font-medium">
+                Choose New Photo
+                <input
+                  type="file"
+                  name="companypic"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+              </div>
+            </label>
+
+            <div className="flex gap-3">
               <button
-                onClick={() => setEditing(true)}
-
+                onClick={handleFileSave}
+                disabled={loading}
+                className="flex-1 bg-[#2557a7] text-white py-2 px-4 rounded-lg hover:bg-[#1e4c9a] transition-all duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed font-medium"
               >
-                {/* Edit */}
-                <FaEdit size={30} style={{ color: '133e87' }} />
+                {loading ? (
+                  <span className="flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent mr-2"></div>
+                    Uploading...
+                  </span>
+                ) : (
+                  'Upload'
+                )}
+              </button>
+              <button
+                onClick={() => setEditing(false)}
+                className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors duration-200 font-medium"
+              >
+                Cancel
               </button>
             </div>
-          )}
-        </>
-      )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
