@@ -18,89 +18,76 @@ const { uploadImage } = require("../services/cloudinary");
 
 
 const getUserProfile = async (req, res) => {
-
-
-
   try {
-      const username = req.params.username
-      const data = await UserProfile.findOne({ username: username })
-      if (!data) return res.status(404).json({ message: "User not found" });
-      res.json(data);
+    const username = req.params.username
+    const data = await UserProfile.findOne({ username: username })
+    if (!data) return res.status(404).json({ message: "User not found" });
+    res.json(data);
   }
   catch (error) {
-
-      res.status(500).json({ message: error.message, hello: "gand mara madarchod" });
+    res.status(500).json({ message: error.message, hello: "gand mara madarchod" });
   }
-
-
 }
 
 const saveUserProfile = async (req, res) => {
   try {
-      const username = req.params.username;
-      const updateData = req.body; // Data to update from request body
+    const username = req.params.username;
+    const updateData = req.body; // Data to update from request body
 
-      if (!username) {
-          return res.status(400).json({ message: "Username is required" });
-      }
+    if (!username) {
+      return res.status(400).json({ message: "Username is required" });
+    }
 
-      const updatedUser = await UserProfile.findOneAndUpdate(
-          { username: username },
-          { $set: updateData },
-          { new: true }
-      );
+    const updatedUser = await UserProfile.findOneAndUpdate(
+      { username: username },
+      { $set: updateData },
+      { new: true }
+    );
 
-      if (!updatedUser) {
-          return res.status(404).json({ message: "User not found" });
-      }
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-      res.json({ message: "Profile updated successfully", user: updatedUser });
+    res.json({ message: "Profile updated successfully", user: updatedUser });
   } catch (error) {
-      console.error("Error updating user profile:", error);
-      res.status(500).json({ message: "Internal Server Error" });
+    console.error("Error updating user profile:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
 const getCompanyProfile = async (req, res) => {
-
-
-
   try {
-      const username = req.params.username
-      const data = await CompanyProfile.findOne({ username: username })
-      if (!data) return res.status(404).json({ message: "User not found" });
-      res.json(data);
+    const username = req.params.username
+    const data = await CompanyProfile.findOne({ username: username })
+    if (!data) return res.status(404).json({ message: "User not found" });
+    res.json(data);
   }
   catch (error) {
-
-      res.status(500).json({ message: error.message, hello: "gand mara madarchod" });
+    res.status(500).json({ message: error.message, hello: "gand mara madarchod" });
   }
 
 
 }
 const saveCompanyProfile = async (req, res) => {
   try {
-      const username = req.params.username;
-      const updateData = req.body; // Data to update from request body
+    const username = req.params.username;
+    const updateData = req.body; // Data to update from request body
+    if (!username) {
+      return res.status(400).json({ message: "Username is required" });
+    }
+    const updatedUser = await CompanyProfile.findOneAndUpdate(
+      { username: username },
+      { $set: updateData },
+      { new: true }
+    );
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-      if (!username) {
-          return res.status(400).json({ message: "Username is required" });
-      }
-
-      const updatedUser = await CompanyProfile.findOneAndUpdate(
-          { username: username },
-          { $set: updateData },
-          { new: true }
-      );
-
-      if (!updatedUser) {
-          return res.status(404).json({ message: "User not found" });
-      }
-
-      res.json({ message: "Profile updated successfully", user: updatedUser });
+    res.json({ message: "Profile updated successfully", user: updatedUser });
   } catch (error) {
-      console.error("Error updating user profile:", error);
-      res.status(500).json({ message: "Internal Server Error" });
+    console.error("Error updating user profile:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -109,21 +96,15 @@ const saveCompanyProfile = async (req, res) => {
 const PostJob = async (req, res) => {
   try {
     const { details } = req.body;
-
     if (!details || !details.jobprofile || !details.location || !details.salary) {
       return res.status(400).json({ msg: "Missing job details", success: false });
     }
-
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({ msg: "JWT must be provided", success: false });
     }
-
     const jwtToken = authHeader.split(" ")[1];
     const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET);
-
-    console.log("Decoded JWT:", decoded);
-
     const job = new JobsModel({
       jobprofile: details.jobprofile,
       companyusername: decoded.username,
@@ -169,11 +150,11 @@ const searchcandidates = async (req, res) => {
 };
 const createUserAssets = async (newUserName) => {
   try {
-      const newUser = await UserAssets.create({ username: newUserName })
-      return newUser;
+    const newUser = await UserAssets.create({ username: newUserName })
+    return newUser;
 
   } catch (error) {
-      console.log("error creating profile", error.message)
+    console.log("error creating profile", error.message)
   }
 }
 
@@ -183,11 +164,9 @@ const sendJSdata = async (req, res) => {
   try {
     const { filter, page = 1, limit = 10 } = req.query;
     const authHeader = req.headers.authorization;
-
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({ msg: "JWT must be provided", success: false });
     }
-
     const jwtToken = authHeader.split(" ")[1];
     const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET);
     const companyid = decoded._id;
@@ -245,15 +224,11 @@ const sendjobdata = async (req, res) => {
   const { id } = req.params;
   const job = await JobsModel.findById(id)
   const appliedusernames = (job.appliedCandidatesID || []);
-  console.log("sjgois", appliedusernames)
   const candidates = await UserProfile.find({ username: { $in: appliedusernames } })
-  console.log("candidates", candidates)
   const short = await shortlisted.findOne({ jobid: id });
-  console.log(short);
   let shortcandidates;
   if (short) shortcandidates = short.candidates
   else shortcandidates = []
-  console.log("kjadf", short);
   res.json({ candidates: candidates, shortlistedcandidates: shortcandidates, msg: "Candidates data recieved successfully!" });
 }
 
@@ -275,7 +250,6 @@ const getJobs = async (req, res) => {
 const shortlistCandidate = async (req, res) => {
   try {
     const { username, id, action } = req.body;
-    console.log("Request Data:", { username, id, action });
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({ msg: "No token provided", success: false });
@@ -285,7 +259,6 @@ const shortlistCandidate = async (req, res) => {
     const company = decoded.username;
     const candidate = await UserProfile.findOne({ username: username });
     const job = await JobsModel.findOne({ _id: id });
-    console.log("skjsfkjs", candidate);
     if (!candidate) {
       return res.status(404).json({ msg: "Candidate not found", success: false });
     }
@@ -320,7 +293,6 @@ const shortlistCandidate = async (req, res) => {
         timestamp: new Date(),
         isRead: false,
       };
-
     } else {
       return res.status(400).json({ msg: "Invalid action", success: false });
     }
@@ -328,7 +300,6 @@ const shortlistCandidate = async (req, res) => {
     await candidate.save();
     await employer.save();
     await job.save();
-    console.log(job.appliedCandidatesID, candidate);
     const message =
       action === "shortlist"
         ? "Candidate successfully shortlisted"
@@ -372,7 +343,6 @@ const reachoutcandidates = async (req, res) => {
       return res.status(200).json({ msg: "Company already exists", success: false });
     }
   } catch (error) {
-    console.error("Error:", error);
     if (error.name === 'JsonWebTokenError') {
       return res.status(401).json({ msg: "Invalid token", success: false });
     }
@@ -399,26 +369,20 @@ const sendjobposts = async (req, res) => {
     console.log(error);
   }
 }
-
 const getCompanyDetails = async (req, res) => {
   try {
-    const companyusername = req.params.companyusername;
-    const job = await JobsModel.find({ companyusername: companyusername });
+    const jobid = req.params.jobid;
+    const job = await JobsModel.findById(jobid);
     res.json(job);
-    // res.send("Hello");
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Internal server issue", error });
   }
-
-
 }
 
 const putJobApplication = async (req, res) => {
   try {
     const newJobDetail = req.body;
-
-
     await JobsModel.findByIdAndUpdate(newJobDetail._id, newJobDetail, { new: true });
     res.status(201).json({ msg: "Job Application submitted successfully!", success: true });
   } catch (error) {
@@ -431,29 +395,22 @@ const putJobApplication = async (req, res) => {
 const getUser = async (req, res) => {
   try {
     const authHeader = req.headers['authorization'];
-
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(401).json({ message: 'Authorization token missing or invalid' });
     }
-
     const token = authHeader.split(' ')[1];
-
-
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
     const user = await UserProfile.findOne({ username: decoded.name })
     user.notifications = user.notifications && user.notifications.sort((a, b) => {
       if (a.isRead == b.isRead) {
-        return new Date(b.createdAt) - new Date(a.createdAt); 
+        return new Date(b.createdAt) - new Date(a.createdAt);
       }
-      return a.isRead ? 1 : -1; 
+      return a.isRead ? 1 : -1;
     });
     await user.save();
     res.status(200).json({ message: 'User verified', username: decoded.name, notifications: user.notifications });
-
   } catch (error) {
     console.error(error);
-
     if (error.name === 'TokenExpiredError') {
       return res.status(401).json({ message: 'Token expired, please login again' });
     }
@@ -461,166 +418,84 @@ const getUser = async (req, res) => {
     res.status(500).json({ msg: "Internal server issue", error });
   }
 };
-
-const saveJobBookmark = async (req, res) => {
-  const { username, jobDetails } = req.body;
+const getUserAssets = async (req, res) => {
   try {
-    const update = {
-      $addToSet: {
-        savedJobs: {
-          jobId: jobDetails.companyusername,
-          jobProfile: jobDetails.jobprofile,
-          company: jobDetails.company
-        }
-      }
-    };
-
-    await UserJobInteraction.findOneAndUpdate(
-      { username },
-      update,
-      { upsert: true, new: true }
-    );
-
-    res.status(200).json({ message: 'Job bookmarked successfully' });
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to bookmark job' });
-  }
-};
-
-const removeJobBookmark = async (req, res) => {
-  const { username, jobId } = req.body;
-  try {
-    await UserJobInteraction.findOneAndUpdate(
-      { username },
-      { $pull: { savedJobs: { jobId } } }
-    );
-    res.status(200).json({ message: 'Job removed from bookmarks' });
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to remove bookmark' });
-  }
-};
-
-const applyToJob = async (req, res) => {
-  const { username, jobDetails } = req.body;
-  try {
-    await UserJobInteraction.findOneAndUpdate(
-      { username },
-      {
-        $pull: { savedJobs: { jobId: jobDetails.companyusername } },
-        $addToSet: {
-          appliedJobs: {
-            jobId: jobDetails.companyusername,
-            jobProfile: jobDetails.jobprofile,
-            company: jobDetails.company
-          }
-        }
-      },
-      { upsert: true, new: true }
-    );
-
-    res.status(200).json({ message: 'Job application submitted' });
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to apply to job' });
-  }
-};
-
-const getUserJobInteractions = async (req, res) => {
-  const { username } = req.query;
-  try {
-    const userInteractions = await UserJobInteraction.findOne({ username });
-    res.status(200).json({
-      savedJobs: userInteractions?.savedJobs || [],
-      appliedJobs: userInteractions?.appliedJobs || []
-    });
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch job interactions' });
-  }
-};
-const getUserAssets = async (req , res) => {
-  try {
-      const username = req.params.username
-      console.log("USRNELKFGKDJF = " , username)
-      const data = await UserAssets.findOne({ username:username })
-      console.log(data);
-      if (!data) return res.status(404).json({ message: "User not found" });
-      res.json(data);
+    const username = req.params.username
+    const data = await UserAssets.findOne({ username: username })
+    if (!data) return res.status(404).json({ message: "User not found" });
+    res.json(data);
   }
   catch (error) {
 
-      res.status(500).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 }
 
-const saveNewProfilePic = async (req , res) => {
+const saveNewProfilePic = async (req, res) => {
   const username = req.params.username;
   try {
-      const filePath = req.file.path; // Path of the uploaded file on the server
-      const folder = "profile_pics"; // Cloudinary folder name
-  
-      const result = await uploadImage(filePath, folder, username);
-      
-      await UserAssets.findOneAndUpdate(
-          { username: username }, 
-          {
-            $set: {
-              profilepicurl: result.secure_url,
-            },
-          },
-          { upsert: true, new: true } 
-        );
-      res.status(200).json({
-        message: "Image uploaded successfully!",
-        imageUrl: result.secure_url,
-      });
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      res.status(500).json({
-        message: "Failed to upload image.",
-        error: error.message,
-      });
-    }
+    const filePath = req.file.path;
+    const folder = "profile_pics";
+    const result = await uploadImage(filePath, folder, username);
+    await UserAssets.findOneAndUpdate(
+      { username: username },
+      {
+        $set: {
+          profilepicurl: result.secure_url,
+        },
+      },
+      { upsert: true, new: true }
+    );
+    res.status(200).json({
+      message: "Image uploaded successfully!",
+      imageUrl: result.secure_url,
+    });
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    res.status(500).json({
+      message: "Failed to upload image.",
+      error: error.message,
+    });
+  }
 }
 
-const saveNewCompanyPic = async (req , res) => {
+const saveNewCompanyPic = async (req, res) => {
   const username = req.params.username;
   try {
-      const filePath = req.file.path; // Path of the uploaded file on the server
-      const folder = "company_pics"; // Cloudinary folder name
-  
-      const result = await uploadImage(filePath, folder, username);
-      
-      await CompanyProfile.findOneAndUpdate(
-          { username: username }, 
-          {
-            $set: {
-              companypicurl: result.secure_url,
-            },
-          },
-          { upsert: true, new: true } 
-        );
-      res.status(200).json({
-        message: "Image uploaded successfully!",
-        imageUrl: result.secure_url,
-      });
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      res.status(500).json({
-        message: "Failed to upload image.",
-        error: error.message,
-      });
-    }
+    const filePath = req.file.path; // Path of the uploaded file on the server
+    const folder = "company_pics"; // Cloudinary folder name
+    const result = await uploadImage(filePath, folder, username);
+    await CompanyProfile.findOneAndUpdate(
+      { username: username },
+      {
+        $set: {
+          companypicurl: result.secure_url,
+        },
+      },
+      { upsert: true, new: true }
+    );
+    res.status(200).json({
+      message: "Image uploaded successfully!",
+      imageUrl: result.secure_url,
+    });
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    res.status(500).json({
+      message: "Failed to upload image.",
+      error: error.message,
+    });
+  }
 }
 
 
 const markasReadfunc = async (req, res) => {
   const { notificationId, username } = req.body;
   try {
-    console.log(notificationId, username)
     const user = await UserProfile.findOne({ username: username })
-    console.log(user)
     const notification = user.notifications && user.notifications.find(elem => elem._id == notificationId)
     notification.isRead = true;
     await user.save();
+    res.status(200).json({ success: true });
   } catch (error) {
     res.status(500).json({ error: 'Failed marking as read' });
   }
@@ -628,14 +503,11 @@ const markasReadfunc = async (req, res) => {
 
 const sendinvite = async (req, res) => {
   try {
-    const { cusername,username, date, time, link, jobId } = req.body;
-    console.log(cusername)
+    const { cusername, username, date, time, link, jobId } = req.body;
     const newInvite = new invited({ username, date, time, link, jobId });
     await newInvite.save();
-    const user=await UserProfile.findOne({username:username});
-    console.log(user.notifications)
+    const user = await UserProfile.findOne({ username: username });
     notification = {
-
       type: "Meeting Invite",
       message: `Your meeting has been scheduled with ${cusername} on ${date} at time ${time}.`,
       timestamp: new Date(),
@@ -652,23 +524,86 @@ const sendinvite = async (req, res) => {
 const scheduledmeets = async (req, res) => {
   try {
     const username = req.params.username;
-    const invites = await invited.find({ username }); 
+    const invites = await invited.find({ username });
     if (!invites.length) {
       return res.status(404).json({ message: 'No scheduled meets found' });
     }
-   
     const formattedInvites = invites.map(invite => ({
-          username: invite.username,
-          date: invite.date,
-          time: invite.time,
-          link: invite.link,
+      username: invite.username,
+      date: invite.date,
+      time: invite.time,
+      link: invite.link,
     }));
-    
     res.json(formattedInvites);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching scheduled meets', error });
   }
 };
+
+const savedJobs = async (req, res) => {
+  try {
+    const { jobid, username } = req.body;
+    const user = await UserAssets.findOne({ username: username });
+    const status = user.savedjobs.includes(jobid);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (status === false) {
+      user.savedjobs.push(jobid);
+      await user.save();
+    }
+    res.status(200).json({ message: "Job saved successfully", user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+const getsavedjob = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const user = await UserAssets.findOne({ username: username });
+    const meets=await invited.find({username:username});
+    let interviews;
+    if(meets) interviews=meets.length;
+    else interviews=0;
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const savedJobs = Array.isArray(user.savedjobs) ? user.savedjobs : [];
+    const jobs = await JobsModel.find();
+    if (savedJobs.length === 0) {
+      return res.status(200).json({ message: "No saved jobs found", jobs: jobs, sjobsdetails: [] });
+    }
+    const sjobids = savedJobs.map(id => new mongoose.Types.ObjectId(id));
+    const sjobsdetails = await JobsModel.find({
+      '_id': { $in: sjobids }
+    });
+    res.status(200).json({ sjobsdetails: sjobsdetails, jobs: jobs,interviews:interviews });
+  } catch (error) {
+    console.error("Error fetching saved jobs:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+const unsavejob = async (req, res) => {
+  try {
+    const { jobid, username } = req.body;
+    const user = await UserAssets.findOne({ username: username });
+    if (!user) return res.status(404).json({ success: false, message: "User not found" });
+    const savedJobs = Array.isArray(user.savedjobs) ? user.savedjobs : [];
+    const filtered = savedJobs.filter(id => id !== jobid);
+    user.savedjobs = filtered;
+    await user.save();
+    const sjobids = filtered.map(id => new mongoose.Types.ObjectId(id));
+    const sjobsdetails = await JobsModel.find({
+      '_id': { $in: sjobids }
+    });
+    res.status(200).json({ success: true, sjobsdetails });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
+
 module.exports = {
 
   PostJob,
@@ -681,9 +616,6 @@ module.exports = {
   getCompanyDetails,
   putJobApplication,
   getUser,
-  saveJobBookmark,
-  removeJobBookmark,
-  getUserJobInteractions,
   shortlistCandidate,
   searchcandidates,
   sendjobposts,
@@ -695,4 +627,7 @@ module.exports = {
   markasReadfunc,
   scheduledmeets,
   sendinvite,
+  savedJobs,
+  getsavedjob,
+  unsavejob
 }

@@ -16,7 +16,6 @@ const Userassets =new Schema({
     savedjobs:{
         type:Array,
         default:[]
-
     }
 });
 const UserAssets=mongoose.model('userassets',Userassets);

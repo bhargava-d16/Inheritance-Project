@@ -29,13 +29,11 @@ const {
   saveNewCompanyPic,
   markasReadfunc,
   scheduledmeets,
-  sendinvite
+  sendinvite,
+  savedJobs,
+  getsavedjob,
+  unsavejob
 } = require("./controllers/Logic");
-
-
-
-// const { loginValidation, signupValidation } = require("./middlewares/Validation");
-// const {  searchcandidates,shortlistCandidate,sendjobposts,sendjobdata,reachoutcandidates,getUserProfile,sendJSdata,PostJob,getJobs,getCompanyDetails,putJobApplication,getUser} = require("./controllers/Logic");
 
 const registeruser = require("./controllers/registeruser");
 const registeremp = require("./controllers/registeremp");
@@ -75,7 +73,7 @@ app.put("/user/:username", saveUserProfile);
 app.get("/company/:username", getCompanyProfile);
 app.put("/company/:username", saveCompanyProfile);
 app.get("/jobs", getJobs);
-app.get("/jobs/:companyusername", getCompanyDetails);
+app.get("/jobs/:jobid", getCompanyDetails);
 app.put("/jobs/:companyusername", putJobApplication);
 app.get("/user",getUser);
 app.post("/register/user", registeruser) 
@@ -97,12 +95,11 @@ app.post(
 app.post('/EDashboard/myjobs/:id/sendinvite',sendinvite)
 app.get("/scheduled-meets/:username", scheduledmeets);
 
+app.get('/user/main/:username',getsavedjob)
+app.post('/user/jobs',savedJobs)
 
-// app.post("/scheduleMeet",scheduleMeet);
+app.post('/user/unsave',unsavejob)
 
-// Start server only after DB connection
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
-
-// createJob();
