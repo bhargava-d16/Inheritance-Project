@@ -20,10 +20,10 @@ The platform focuses on simplifying job search complexities by offering intellig
 ## 🔗 Links
 
 - [GitHub Repository](https://github.com/bhargava-d16/Inheritance-Project)
-- [Demo Video](#)
+- [Demo Video](https://drive.google.com/drive/folders/1TdpPSDaJZT0hSD8i9ITVOq8Y_zCnjiGy?dmr=1&ec=wgc-drive-hero-goto)
 - [Project Screenshots](https://drive.google.com/drive/folders/1TdpPSDaJZT0hSD8i9ITVOq8Y_zCnjiGy?dmr=1&ec=wgc-drive-hero-goto)
-- [Hosted Website](#)
-- [Backend API](#)
+- [Hosted Website](https://inheritance-project-spsr.vercel.app/)
+- [Backend API](https://inheritance-project-4kr9.onrender.com)
 
 ## 🤖 Tech Stack
 
