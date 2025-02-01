@@ -68,7 +68,7 @@ const ProfileForm = ( ) => {
         <div className="p-6">
           <div className="grid gap-6">
             {Object.entries(companyProfile)
-              .filter(([key]) => key !== "_id" && key !== "__v" && key !== "notifications")
+              .filter(([key]) => key !== "_id" && key !== "__v" && key !== "notifications" && key!=="companypicurl")
               .map(([key, value]) => (
                 <div key={key} className="border-b border-gray-200 last:border-0 pb-6 last:pb-0">
                   <label className="block text-sm font-semibold text-gray-700 mb-2 capitalize">
