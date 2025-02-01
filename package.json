@@ -1,0 +1,22 @@
+{
+  "name": "inheritance-project",
+  "version": "1.0.0",
+  "description": "React + Vite",
+  "main": "eslint.config.js",
+  "scripts": {
+    "build":"npm install --prefix Backend && npm install --prefix Frontend && npm run build --prefix Frontend",
+    "start":"npm run start --prefix Backend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bhargava-d16/Inheritance-Project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/bhargava-d16/Inheritance-Project/issues"
+  },
+  "homepage": "https://github.com/bhargava-d16/Inheritance-Project#readme"
+}

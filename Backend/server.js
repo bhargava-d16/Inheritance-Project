@@ -6,7 +6,8 @@ const requireAuth = require("./middlewares/requireauth");
 const { connectDB, createUser } = require("./models/db");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-
+const path = require("path");
+const __dirname= path.resolve();
 
 const {
   searchcandidates,
@@ -41,13 +42,24 @@ const loginuser = require("./controllers/loginuser");
 const loginemp = require("./controllers/loginemp");
 
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({
+  origin:"http://localhost:5173",
+  credentials:true,
+}));
 const { upload } = require("./middlewares/multer");
 app.use((error, req, res, next) => {
   const message = error.message;
   const statusCode = error.statusCode || 500;
   res.status(statusCode).json({ message: message, hello: "world" });
 });
+
+if(process.env.NODE_ENV==="production"){
+  app.use(express.static(path.join(__dirname,"../Frontend/dist")))
+
+  app.get('*',(req,res)=>{
+    res.sendFile(path.join(__dirname,"../Frontend","dist","index.html"))
+  })
+}
 
 const startServer = async () => {
   try {
@@ -99,6 +111,11 @@ app.get('/user/main/:username',getsavedjob)
 app.post('/user/jobs',savedJobs)
 
 app.post('/user/unsave',unsavejob)
+
+
+
+
+
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
