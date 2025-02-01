@@ -43,7 +43,7 @@ const loginemp = require("./controllers/loginemp");
 
 app.use(bodyParser.json());
 app.use(cors({
-  origin:["http://localhost:5173 ","http://localhost:4173"],
+  origin:["http://localhost:5173 ","http://localhost:4173","https://inheritance-project-spsr.vercel.app/"],
   credentials:true,
 }));
 const { upload } = require("./middlewares/multer");
