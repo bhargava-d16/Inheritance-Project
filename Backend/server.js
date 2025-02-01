@@ -7,7 +7,7 @@ const { connectDB, createUser } = require("./models/db");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
-const __dirname= path.resolve();
+
 
 const {
   searchcandidates,
