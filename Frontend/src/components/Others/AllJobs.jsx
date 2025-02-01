@@ -1,31 +1,33 @@
-
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa"
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 const AllJobs = () => {
   const [jobs, setJobs] = useState([]);
   const [currPage, setCurrPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [limit, setLimit] = useState(7);
   const [fdata, setFdata] = useState([]);
-  const [search, setsearch] = useState('')
+  const [search, setsearch] = useState("");
 
   const fetchJobs = async () => {
-    const jwtToken = localStorage.getItem('accessToken');
+    const jwtToken = localStorage.getItem("accessToken");
     try {
-      const response = await axios.get('/api/EDashboard/myjobs', {
-        headers: {
-          Authorization: `Bearer ${jwtToken}`,
-        },
-      });
+      const response = await axios.get(
+        "https://inheritance-project-4kr9.onrender.com/EDashboard/myjobs",
+        {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
+      );
       const result = response.data.jobs;
-      console.log(result)
+      console.log(result);
       setJobs(result);
       setFdata(result);
       setTotalPage(Math.ceil(result.length / limit));
     } catch (error) {
-      console.error('Error fetching jobs:', error);
+      console.error("Error fetching jobs:", error);
     }
   };
   useEffect(() => {
@@ -42,15 +44,20 @@ const AllJobs = () => {
     }
   };
   const OnSearch = () => {
-    const searchres = jobs.filter(elem => elem.jobprofile.toLowerCase().includes(search.toLowerCase()));
+    const searchres = jobs.filter((elem) =>
+      elem.jobprofile.toLowerCase().includes(search.toLowerCase())
+    );
     setFdata(searchres);
     console.log(searchres);
-  }
+  };
   return (
     <div>
       <div className="heading">
         <h3>Your Job Postings Dashboard</h3>
-        <p>Easily manage your job listings, track applicant activity, and streamline your recruitment process with intuitive tools.</p>
+        <p>
+          Easily manage your job listings, track applicant activity, and
+          streamline your recruitment process with intuitive tools.
+        </p>
       </div>
       <div className="search-jobs">
         <input
@@ -63,9 +70,8 @@ const AllJobs = () => {
         <button className="JSbutton" onClick={OnSearch}>
           Search
         </button>
-
       </div>
-      <table className='Jobstable mt-5'>
+      <table className="Jobstable mt-5">
         <thead>
           <tr>
             <th>Job Title</th>
@@ -75,16 +81,30 @@ const AllJobs = () => {
           </tr>
         </thead>
         <tbody>
-          {fdata.length > 0 && fdata.slice((currPage - 1) * limit, currPage * limit).map((job, idx) => (
-            <tr key={idx}>
-              <td>{job.jobprofile}</td>
-              <td>{new Date(job.createdAt).toLocaleDateString()}</td>
-              <td>{job.appliedCandidatesID && job.appliedCandidatesID.length ? job.appliedCandidatesID.length : 0}</td>
-              <td>
-                <Link to={`/EDashboard/myjobs/${job._id}`} className='text-black' >View Candidates</Link>
-              </td>
-            </tr>
-          )) || <p className='flex align-center justify-center '>No Jobs..</p>}
+          {(fdata.length > 0 &&
+            fdata
+              .slice((currPage - 1) * limit, currPage * limit)
+              .map((job, idx) => (
+                <tr key={idx}>
+                  <td>{job.jobprofile}</td>
+                  <td>{new Date(job.createdAt).toLocaleDateString()}</td>
+                  <td>
+                    {job.appliedCandidatesID && job.appliedCandidatesID.length
+                      ? job.appliedCandidatesID.length
+                      : 0}
+                  </td>
+                  <td>
+                    <Link
+                      to={`/EDashboard/myjobs/${job._id}`}
+                      className="text-black"
+                    >
+                      View Candidates
+                    </Link>
+                  </td>
+                </tr>
+              ))) || (
+            <p className="flex align-center justify-center ">No Jobs..</p>
+          )}
         </tbody>
       </table>
 
@@ -97,8 +117,6 @@ const AllJobs = () => {
           <FaChevronRight></FaChevronRight>
         </button>
       </div>
-      
-
     </div>
   );
 };

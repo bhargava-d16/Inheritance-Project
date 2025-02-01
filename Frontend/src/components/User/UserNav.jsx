@@ -4,7 +4,7 @@ import { Bell } from "lucide-react";
 import axios from "axios";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useLogout } from "../../context/useLogout";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 
 let sharedUsername = "";
 
@@ -24,11 +24,14 @@ const UserNav = () => {
     const token = localStorage.getItem("accessToken");
     if (token) {
       try {
-        const response = await axios.get("/api/user", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "https://inheritance-project-4kr9.onrender.com/user",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         if (response.data) {
           setUsername(response.data.username);
           sharedUsername = response.data.username;
@@ -42,15 +45,18 @@ const UserNav = () => {
 
   const handleScheduledMeetingsClick = async () => {
     try {
-      const response = await axios.get(`/api/scheduled-meets/${sharedUsername}`);
+      const response = await axios.get(
+        `https://inheritance-project-4kr9.onrender.com/scheduled-meets/${sharedUsername}`
+      );
       setScheduledMeets(response.data);
       setShowScheduledMeetsPopup(true);
     } catch (error) {
       console.error("Error fetching scheduled meets:", error);
-      toast.error(error.response?.data?.message || "Error fetching scheduled meetings");
+      toast.error(
+        error.response?.data?.message || "Error fetching scheduled meetings"
+      );
     }
   };
-
 
   useEffect(() => {
     getUsername();
@@ -59,7 +65,7 @@ const UserNav = () => {
   const handleRead = async (notificationId) => {
     const username = localStorage.getItem("username");
     try {
-      await axios.put("/api/user", {
+      await axios.put("https://inheritance-project-4kr9.onrender.com/user", {
         notificationId,
         username,
       });
@@ -95,21 +101,38 @@ const UserNav = () => {
       )}
 
       {/* Navigation Bar */}
-      <nav className="sticky top-0 z-50 w-full shadow-md" style={{ backgroundColor: "#133E87", boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)" }}>
+      <nav
+        className="sticky top-0 z-50 w-full shadow-md"
+        style={{
+          backgroundColor: "#133E87",
+          boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+        }}
+      >
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex h-16 items-center justify-between">
             {/* Logo and Navigation Links */}
             <div className="flex items-center space-x-4">
               <Link className="no-underline" to="/">
-                <span className="text-2xl font-bold text-white pr-8 pl-2">JobPortal</span>
+                <span className="text-2xl font-bold text-white pr-8 pl-2">
+                  JobPortal
+                </span>
               </Link>
-              <button onClick={() => handleNavigation("/user")} className="block px-4 py-2 text-sm text-white hover:bg-transparent underline-offset-4 hover:underline">
+              <button
+                onClick={() => handleNavigation("/user")}
+                className="block px-4 py-2 text-sm text-white hover:bg-transparent underline-offset-4 hover:underline"
+              >
                 Home
               </button>
-              <button onClick={() => handleNavigation("/user/jobs")} className="block px-4 py-2 text-sm text-white hover:bg-transparent underline-offset-4 hover:underline">
+              <button
+                onClick={() => handleNavigation("/user/jobs")}
+                className="block px-4 py-2 text-sm text-white hover:bg-transparent underline-offset-4 hover:underline"
+              >
                 Jobs
               </button>
-              <button onClick={handleScheduledMeetingsClick} className="block px-4 py-2 text-sm text-white hover:bg-transparent underline-offset-4 hover:underline">
+              <button
+                onClick={handleScheduledMeetingsClick}
+                className="block px-4 py-2 text-sm text-white hover:bg-transparent underline-offset-4 hover:underline"
+              >
                 Scheduled Meetings
               </button>
             </div>
@@ -117,7 +140,10 @@ const UserNav = () => {
             {/* Notifications */}
             <div className="flex items-center space-x-4">
               <div className="relative">
-                <button onClick={() => setShowNotifications(!showNotifications)} className="p-2 text-white hover:bg-[#1e4ea3] rounded-full relative">
+                <button
+                  onClick={() => setShowNotifications(!showNotifications)}
+                  className="p-2 text-white hover:bg-[#1e4ea3] rounded-full relative"
+                >
                   <Bell size={20} />
                   <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
                 </button>
@@ -125,35 +151,64 @@ const UserNav = () => {
                 {showNotifications && (
                   <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border overflow-hidden">
                     <div className="p-3 border-b bg-gray-50">
-                      <h3 className="font-semibold text-gray-800">Notifications</h3>
+                      <h3 className="font-semibold text-gray-800">
+                        Notifications
+                      </h3>
                     </div>
                     <div className="max-h-96 overflow-y-auto">
                       {notifications.length > 0 ? (
                         notifications.map((notification) => (
-                          <div key={notification._id} className={`p-3 border-b hover:bg-gray-50 transition-colors ${!notification.isRead ? "bg-blue-50" : ""}`}>
+                          <div
+                            key={notification._id}
+                            className={`p-3 border-b hover:bg-gray-50 transition-colors ${
+                              !notification.isRead ? "bg-blue-50" : ""
+                            }`}
+                          >
                             <div className="flex items-start justify-between">
                               <div>
                                 {/* Notification Message */}
-                                <p className="text-sm text-gray-800">{notification.message}</p>
+                                <p className="text-sm text-gray-800">
+                                  {notification.message}
+                                </p>
 
                                 {/* Timestamp */}
                                 <div className="flex align-middle w-full">
-                                  <span className="text-xs text-gray-500">{new Date(notification.timestamp).toLocaleString()}</span>
-                                  <span className={notification.isRead ? "hidden" : "bg-emerald-500 rounded-md font-mono text-sm relative left-12"}>
-                                    <button onClick={() => handleRead(notification._id)}>Mark as Read</button>
+                                  <span className="text-xs text-gray-500">
+                                    {new Date(
+                                      notification.timestamp
+                                    ).toLocaleString()}
+                                  </span>
+                                  <span
+                                    className={
+                                      notification.isRead
+                                        ? "hidden"
+                                        : "bg-emerald-500 rounded-md font-mono text-sm relative left-12"
+                                    }
+                                  >
+                                    <button
+                                      onClick={() =>
+                                        handleRead(notification._id)
+                                      }
+                                    >
+                                      Mark as Read
+                                    </button>
                                   </span>
                                 </div>
                               </div>
 
                               {/* Unread Badge */}
                               {!notification.isRead && (
-                                <span className="px-2 py-1 text-xs font-semibold text-white bg-[#133E87] rounded-full">New</span>
+                                <span className="px-2 py-1 text-xs font-semibold text-white bg-[#133E87] rounded-full">
+                                  New
+                                </span>
                               )}
                             </div>
                           </div>
                         ))
                       ) : (
-                        <div className="p-3 text-sm text-gray-500">No notifications available.</div>
+                        <div className="p-3 text-sm text-gray-500">
+                          No notifications available.
+                        </div>
                       )}
                     </div>
                   </div>
@@ -181,9 +236,7 @@ const UserNav = () => {
                 </button>
 
                 {isMenuOpen && (
-                  <div
-                    className="absolute right-0 mt-2 w-48 rounded-md shadow-lg py-2 bg-white border border-gray-200"
-                  >
+                  <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg py-2 bg-white border border-gray-200">
                     <button
                       onClick={() => handleNavigation(`/user/${username}`)}
                       className="block w-full text-left px-4 py-2 text-sm text-[#133E87]  hover:underline"
@@ -255,7 +308,9 @@ const UserNav = () => {
                   ))}
                 </ul>
               ) : (
-                <p className="text-gray-700 text-center py-4">No scheduled meetings found.</p>
+                <p className="text-gray-700 text-center py-4">
+                  No scheduled meetings found.
+                </p>
               )}
             </div>
 

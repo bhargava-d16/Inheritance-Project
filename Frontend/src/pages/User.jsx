@@ -1,41 +1,36 @@
-
-
-import React, { useState, useEffect } from 'react';
-import UserNav from '../components/User/UserNav';
-import UserPage from '../components/User/UserPage';
-import Footer from '../components/Others/Footer';
-import axios from 'axios';
-import { useAuthContext } from '../hooks/useAuthContext';
-
+import React, { useState, useEffect } from "react";
+import UserNav from "../components/User/UserNav";
+import UserPage from "../components/User/UserPage";
+import Footer from "../components/Others/Footer";
+import axios from "axios";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 const User = () => {
-  const {user}=useAuthContext()
+  const { user } = useAuthContext();
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    
     const fetchJobs = async () => {
       try {
-        const response = await axios.get('/api/jobs',{
-          
-            headers:{
-  
-              "authorization":`Bearer ${user.token}`
-              
-            }
+        const response = await axios.get(
+          "https://inheritance-project-4kr9.onrender.com/jobs",
+          {
+            headers: {
+              authorization: `Bearer ${user.token}`,
+            },
           }
         );
-        console.log('API Response:', response.data);
+        console.log("API Response:", response.data);
         setJobs(response.data);
       } catch (error) {
-        console.error('Error fetching jobs:', error);
+        console.error("Error fetching jobs:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    if(user){
+    if (user) {
       fetchJobs();
     }
   }, []);

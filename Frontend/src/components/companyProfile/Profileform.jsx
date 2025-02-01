@@ -2,20 +2,22 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
-const ProfileForm = ( ) => {
+const ProfileForm = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [companyProfile, setCompanyProfile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [saving, setSaving] = useState(false);
 
-  const {username} = useParams();
+  const { username } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`/api/company/${username}`);
+        const response = await axios.get(
+          `https://inheritance-project-4kr9.onrender.com/company/${username}`
+        );
         setCompanyProfile(response.data);
       } catch (error) {
         setError(error.message || "Failed to fetch data.");
@@ -23,10 +25,9 @@ const ProfileForm = ( ) => {
         setLoading(false);
       }
     };
-    
-    fetchData();
-  }, [username]); 
 
+    fetchData();
+  }, [username]);
 
   const handleChange = (e) => {
     setCompanyProfile((prevProfile) => ({
@@ -42,9 +43,13 @@ const ProfileForm = ( ) => {
 
     try {
       setSaving(true);
-      await axios.put(`/api/company/${username}`, companyProfile, {
-        headers: { "Content-Type": "application/json" },
-      });
+      await axios.put(
+        `https://inheritance-project-4kr9.onrender.com/company/${username}`,
+        companyProfile,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
       setIsEditing(false);
     } catch (error) {
@@ -56,21 +61,33 @@ const ProfileForm = ( ) => {
 
   if (loading) return <p className="text-center text-[#133E87]">Loading...</p>;
   if (error) return <p className="text-center text-red-500">Error: {error}</p>;
-  if (!companyProfile) return <p className="text-center text-[#133E87]">No user data found.</p>;
+  if (!companyProfile)
+    return <p className="text-center text-[#133E87]">No user data found.</p>;
 
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200">
         <div className="bg-[#2557a7] px-6 py-4">
-          <h2 className="text-2xl font-bold text-white flex justify-center">Company Profile</h2>
+          <h2 className="text-2xl font-bold text-white flex justify-center">
+            Company Profile
+          </h2>
         </div>
 
         <div className="p-6">
           <div className="grid gap-6">
             {Object.entries(companyProfile)
-              .filter(([key]) => key !== "_id" && key !== "__v" && key !== "notifications" && key!=="companypicurl")
+              .filter(
+                ([key]) =>
+                  key !== "_id" &&
+                  key !== "__v" &&
+                  key !== "notifications" &&
+                  key !== "companypicurl"
+              )
               .map(([key, value]) => (
-                <div key={key} className="border-b border-gray-200 last:border-0 pb-6 last:pb-0">
+                <div
+                  key={key}
+                  className="border-b border-gray-200 last:border-0 pb-6 last:pb-0"
+                >
                   <label className="block text-sm font-semibold text-gray-700 mb-2 capitalize">
                     {key.replace(/([A-Z])/g, " $1")}
                   </label>
@@ -100,44 +117,49 @@ const ProfileForm = ( ) => {
                           <span className="text-sm text-gray-700">No</span>
                         </label>
                       </div>
-                    ) : (
-                      Array.isArray(value) ? (
-                        <div className="space-y-2">
-                          <div className="flex flex-wrap gap-2">
-                            {value.map((tech, index) => (
-                              <Button key={index} skill={tech} isEditing={isEditing} onRemove={onRemove} />
-                            ))}
-                          </div>
-                          <input
-                            type="text"
-                            name={key}
-                            value={Array.isArray(value) ? value.join(", ") : value || ""}
-                            onChange={handleChange}
-                            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2557a7] focus:border-[#2557a7]"
-                          />
+                    ) : Array.isArray(value) ? (
+                      <div className="space-y-2">
+                        <div className="flex flex-wrap gap-2">
+                          {value.map((tech, index) => (
+                            <Button
+                              key={index}
+                              skill={tech}
+                              isEditing={isEditing}
+                              onRemove={onRemove}
+                            />
+                          ))}
                         </div>
-                      ) : (
                         <input
                           type="text"
                           name={key}
-                          value={value || ""}
+                          value={
+                            Array.isArray(value)
+                              ? value.join(", ")
+                              : value || ""
+                          }
                           onChange={handleChange}
                           className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2557a7] focus:border-[#2557a7]"
                         />
-                      )
-                    )
-                  ) : (
-                    Array.isArray(value) ? (
-                      <div className="flex flex-wrap gap-2">
-                        {value.map((tech, index) => (
-                          <Button key={index} skill={tech} />
-                        ))}
                       </div>
                     ) : (
-                      <p className="text-sm text-gray-700">
-                        {value === "N/A" ? "-" : value}
-                      </p>
+                      <input
+                        type="text"
+                        name={key}
+                        value={value || ""}
+                        onChange={handleChange}
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2557a7] focus:border-[#2557a7]"
+                      />
                     )
+                  ) : Array.isArray(value) ? (
+                    <div className="flex flex-wrap gap-2">
+                      {value.map((tech, index) => (
+                        <Button key={index} skill={tech} />
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-700">
+                      {value === "N/A" ? "-" : value}
+                    </p>
                   )}
                 </div>
               ))}

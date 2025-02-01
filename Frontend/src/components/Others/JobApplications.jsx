@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import axios from 'axios';
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa"
+import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+import axios from "axios";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-import { FaCheck, FaVideo, FaTimes, FaPaperPlane, } from "react-icons/fa";
+import { FaCheck, FaVideo, FaTimes, FaPaperPlane } from "react-icons/fa";
 
 const JobApplications = () => {
   const [candidates, setCandidates] = useState([]);
-  const [searchR, setsearchR] = useState(candidates)
+  const [searchR, setsearchR] = useState(candidates);
   const [shortlisted, setShortlisted] = useState([]);
   const [rejected, setRejected] = useState([]);
-  const [search, setsearch] = useState('')
-  const [currPage, setcurrPage] = useState(1)
-  const [totalPage, settotalPage] = useState(1)
-  const [limit, setlimit] = useState(6)
+  const [search, setsearch] = useState("");
+  const [currPage, setcurrPage] = useState(1);
+  const [totalPage, settotalPage] = useState(1);
+  const [limit, setlimit] = useState(6);
   const { id } = useParams();
   const [showInviteForm, setShowInviteForm] = useState(false);
   const [inviteData, setInviteData] = useState({
@@ -24,23 +24,25 @@ const JobApplications = () => {
   });
   const fetchCandidates = async () => {
     try {
-      const response = await axios.get(`/api/EDashboard/myjobs/${id}`);
+      const response = await axios.get(
+        `https://inheritance-project-4kr9.onrender.com/EDashboard/myjobs/${id}`
+      );
       console.log(response.data.candidates);
       const result = response.data.candidates;
-      settotalPage(Math.ceil(result.length / limit))
+      settotalPage(Math.ceil(result.length / limit));
       setCandidates(result || []);
       setsearchR(result || []);
       setShortlisted(response.data.shortlistedcandidates || []);
       setRejected(response.data.rejectedcandidates || []);
     } catch (error) {
-      console.error('An Error Occurred', error);
+      console.error("An Error Occurred", error);
     }
   };
   const handleAction = async (action, username) => {
     try {
-      const jwtToken = localStorage.getItem('accessToken');
+      const jwtToken = localStorage.getItem("accessToken");
       const response = await axios.post(
-        `/api/EDashboard/myjobs/${id}`,
+        `https://inheritance-project-4kr9.onrender.com/EDashboard/myjobs/${id}`,
         { username, id, action },
         {
           headers: {
@@ -48,11 +50,14 @@ const JobApplications = () => {
           },
         }
       );
-      console.log(`Candidate ${action === 'shortlist' ? 'Shortlisted' : 'Rejected'}:`, response.data);
+      console.log(
+        `Candidate ${action === "shortlist" ? "Shortlisted" : "Rejected"}:`,
+        response.data
+      );
 
-      if (action === 'shortlist') {
+      if (action === "shortlist") {
         setShortlisted(response.data.updatedCandidates);
-      } else if (action === 'reject') {
+      } else if (action === "reject") {
         setRejected((prevRejected) => [...prevRejected, username]);
       }
     } catch (error) {
@@ -62,17 +67,21 @@ const JobApplications = () => {
 
   const OnSearch = () => {
     console.log(search);
-    const searchres = candidates.filter(elem =>
-      elem.username && elem.username.includes(search) || elem.skills && elem.skills.some(skill => skill.toLowerCase().includes(search.toLowerCase()))
-    )
+    const searchres = candidates.filter(
+      (elem) =>
+        (elem.username && elem.username.includes(search)) ||
+        (elem.skills &&
+          elem.skills.some((skill) =>
+            skill.toLowerCase().includes(search.toLowerCase())
+          ))
+    );
     console.log(searchres);
-    setsearchR(searchres)
-  }
+    setsearchR(searchres);
+  };
   const resetSearch = () => {
-    console.log("reseting search")
-    setsearchR(candidates)
-
-  }
+    console.log("reseting search");
+    setsearchR(candidates);
+  };
   useEffect(() => {
     fetchCandidates();
   }, []);
@@ -91,7 +100,7 @@ const JobApplications = () => {
     if (currPage < totalPage) {
       setcurrPage(currPage + 1);
     }
-  }
+  };
   const handleCreateRoom = (username) => {
     window.open(
       "https://450de5c462284eeb0b3e-bhargavas-projects-15243da0.vercel.app/create",
@@ -107,35 +116,30 @@ const JobApplications = () => {
 
   const handleInviteSubmit = async (e) => {
     e.preventDefault();
-    const u = localStorage.getItem('username');
+    const u = localStorage.getItem("username");
 
     try {
-
       const response = await axios.post(
-        `/api/EDashboard/myjobs/${id}/sendinvite`,
+        `https://inheritance-project-4kr9.onrender.com/EDashboard/myjobs/${id}/sendinvite`,
         {
           username: inviteData.username,
           date: inviteData.date,
           time: inviteData.time,
           link: inviteData.link,
           jobId: id,
-          cusername: u
+          cusername: u,
         }
       );
 
-
       if (response.status === 201) {
-
         alert(
           `Invitation sent to ${inviteData.username} and saved in the database.`
         );
         setShowInviteForm(false);
       } else {
-
         alert("Failed to send invite. Please try again.");
       }
     } catch (error) {
-
       console.error("Error saving invite:", error);
       alert("Failed to send invite. Please try again.");
     }
@@ -147,8 +151,10 @@ const JobApplications = () => {
 
   return (
     <div className="mt-5 mx-auto w-11/12 lg:w-3/4">
-      <h1 className="text-2xl font-bold text-center text-gray-700 mb-6">Job Applications</h1>
-      <div className='flex items-center justify-center mb-2'>
+      <h1 className="text-2xl font-bold text-center text-gray-700 mb-6">
+        Job Applications
+      </h1>
+      <div className="flex items-center justify-center mb-2">
         <input
           className="search"
           type="text"
@@ -177,76 +183,88 @@ const JobApplications = () => {
             </tr>
           </thead>
           <tbody>
-            {searchR.slice((currPage - 1) * limit, (currPage) * limit).map((elem, idx) => (
-              <tr
-                key={idx}
-                className='bg-white border-b hover:bg-gray-50'
-              >
-                <td className="p-3">{elem.username || 'Unknown'}</td>
-                <td className="p-3">{elem.skills?.join(', ') || 'No skills'}</td>
-                <td className="p-3">{elem.experience || 'Not provided'}</td>
-                <td className="p-3">
-                  <div className="flex flex-wrap justify-center gap-2">
-                    <button
-                      onClick={() => handleAction('shortlist', elem.username)}
-                      className={`px-3 py-1 rounded ${isShortlisted(elem.username)
-                        ? 'bg-green-500 hover:bg-green-600 text-white'
-                        : 'bg-blue-500 hover:bg-blue-600 text-white'
-                        }`}
-                      disabled={isShortlisted(elem.username) || isRejected(elem.username)}
-                    >
-                      {isShortlisted(elem.username) ? (
-                        <span><FaCheck className="inline-block mr-1" /></span>
-                      ) : (
-                        <FaCheck className="inline-block" />
-                      )}
-                    </button>
-
-                    {!isShortlisted(elem.username) && (
+            {searchR
+              .slice((currPage - 1) * limit, currPage * limit)
+              .map((elem, idx) => (
+                <tr key={idx} className="bg-white border-b hover:bg-gray-50">
+                  <td className="p-3">{elem.username || "Unknown"}</td>
+                  <td className="p-3">
+                    {elem.skills?.join(", ") || "No skills"}
+                  </td>
+                  <td className="p-3">{elem.experience || "Not provided"}</td>
+                  <td className="p-3">
+                    <div className="flex flex-wrap justify-center gap-2">
                       <button
-                        onClick={() => handleAction('reject', elem.username)}
-                        className={`px-3 py-1 rounded ${isRejected(elem.username)
-                          ? 'bg-gray-400 text-gray-700 cursor-not-allowed'
-                          : 'bg-red-500 hover:bg-red-600 text-white'
-                          }`}
-                        disabled={isRejected(elem.username)}
+                        onClick={() => handleAction("shortlist", elem.username)}
+                        className={`px-3 py-1 rounded ${
+                          isShortlisted(elem.username)
+                            ? "bg-green-500 hover:bg-green-600 text-white"
+                            : "bg-blue-500 hover:bg-blue-600 text-white"
+                        }`}
+                        disabled={
+                          isShortlisted(elem.username) ||
+                          isRejected(elem.username)
+                        }
                       >
-                        {isRejected(elem.username) ? (
-                          <span><FaTimes className="inline-block mr-1" /> Rejected</span>
+                        {isShortlisted(elem.username) ? (
+                          <span>
+                            <FaCheck className="inline-block mr-1" />
+                          </span>
                         ) : (
-                          <FaTimes className="inline-block" />
+                          <FaCheck className="inline-block" />
                         )}
                       </button>
-                    )}
-                  </div>
-                </td>
 
-                <td className="p-3 text-center">
-                  <Link to={`/user/${elem.username}`} className="text-blue-600 no-underline hover:underline">
-                    View Profile
-                  </Link>
-                </td>
+                      {!isShortlisted(elem.username) && (
+                        <button
+                          onClick={() => handleAction("reject", elem.username)}
+                          className={`px-3 py-1 rounded ${
+                            isRejected(elem.username)
+                              ? "bg-gray-400 text-gray-700 cursor-not-allowed"
+                              : "bg-red-500 hover:bg-red-600 text-white"
+                          }`}
+                          disabled={isRejected(elem.username)}
+                        >
+                          {isRejected(elem.username) ? (
+                            <span>
+                              <FaTimes className="inline-block mr-1" /> Rejected
+                            </span>
+                          ) : (
+                            <FaTimes className="inline-block" />
+                          )}
+                        </button>
+                      )}
+                    </div>
+                  </td>
 
-                <td className="p-3 text-center">
-                  <button
-                    onClick={() => handleCreateRoom(elem.username)}
-                    className="JSbutton flex items-center justify-center mx-auto space-x-2"
-                  >
-                    <FaVideo /> <span>Interview</span>
-                  </button>
-                </td>
+                  <td className="p-3 text-center">
+                    <Link
+                      to={`/user/${elem.username}`}
+                      className="text-blue-600 no-underline hover:underline"
+                    >
+                      View Profile
+                    </Link>
+                  </td>
 
-                <td className="p-3 text-center">
-                  <button
-                    onClick={(e) => handleSendInvite(e, elem.username)}
-                    className="JSbutton flex items-center justify-center mx-auto space-x-2"
-                  >
-                    <FaPaperPlane /> <span>Invite</span>
-                  </button>
-                </td>
+                  <td className="p-3 text-center">
+                    <button
+                      onClick={() => handleCreateRoom(elem.username)}
+                      className="JSbutton flex items-center justify-center mx-auto space-x-2"
+                    >
+                      <FaVideo /> <span>Interview</span>
+                    </button>
+                  </td>
 
-              </tr>
-            ))}
+                  <td className="p-3 text-center">
+                    <button
+                      onClick={(e) => handleSendInvite(e, elem.username)}
+                      className="JSbutton flex items-center justify-center mx-auto space-x-2"
+                    >
+                      <FaPaperPlane /> <span>Invite</span>
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       ) : (
@@ -316,7 +334,6 @@ const JobApplications = () => {
         </div>
       )}
     </div>
-
   );
 };
 export default JobApplications;

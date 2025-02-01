@@ -21,24 +21,24 @@ const JSCard = ({
     "public/images/person1.png",
     "public/images/person2.png",
     "public/images/person3.png",
-    
   ];
-  const randomImage = candidateImages[parseInt(username.charCodeAt(0)) % candidateImages.length];
+  const randomImage =
+    candidateImages[parseInt(username.charCodeAt(0)) % candidateImages.length];
   const handleShortlist = async (e) => {
     const jwtToken = localStorage.getItem("accessToken");
 
     try {
       const response = await axios.post(
-        "/api/EDashboard",
+        "https://inheritance-project-4kr9.onrender.com/EDashboard",
         { username },
         {
           headers: { Authorization: `Bearer ${jwtToken}` },
         }
       );
       if (response.data.success) {
-        toast.success("User has been reached")
+        toast.success("User has been reached");
       } else {
-        toast.error("Already reached this user.")
+        toast.error("Already reached this user.");
       }
     } catch (error) {
       console.error("Error updating shortlist status:", error);
@@ -49,11 +49,7 @@ const JSCard = ({
   return (
     <div className="jscard">
       <div className="s1">
-        <img
-          className="jsimage"
-          src={randomImage}
-          alt="Profile Photo"
-        />
+        <img className="jsimage" src={randomImage} alt="Profile Photo" />
         <div className="s1info">
           <h4>{name}</h4>
           <p>DOB:{DOB}</p>

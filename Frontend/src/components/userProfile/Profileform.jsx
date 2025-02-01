@@ -15,7 +15,9 @@ const UserProfile = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`/api/user/${username}`);
+        const response = await axios.get(
+          `https://inheritance-project-4kr9.onrender.com/user/${username}`
+        );
         setUserProfile(response.data);
       } catch (error) {
         setError(error.message || "Failed to fetch data.");
@@ -48,14 +50,14 @@ const UserProfile = () => {
     if (!userProfile) return;
     const newUserProfile = {
       ...userProfile,
-      skills: userProfile.skills.filter((skill) => skill.trim() !== "")
+      skills: userProfile.skills.filter((skill) => skill.trim() !== ""),
     };
     setUserProfile(newUserProfile);
 
     try {
       setSaving(true);
       await axios.put(
-        `/api/user/${username}`,
+        `https://inheritance-project-4kr9.onrender.com/user/${username}`,
         JSON.stringify(newUserProfile),
         { headers: { "Content-Type": "application/json" } }
       );
@@ -77,37 +79,53 @@ const UserProfile = () => {
     }
   };
 
-  if (loading) return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#133E87] border-t-transparent"></div>
-    </div>
-  );
+  if (loading)
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#133E87] border-t-transparent"></div>
+      </div>
+    );
 
-  if (error) return (
-    <div className="max-w-2xl mx-auto mt-8 p-6 bg-red-50 rounded-lg border border-red-200">
-      <p className="text-center text-red-600 font-medium">Error: {error}</p>
-    </div>
-  );
+  if (error)
+    return (
+      <div className="max-w-2xl mx-auto mt-8 p-6 bg-red-50 rounded-lg border border-red-200">
+        <p className="text-center text-red-600 font-medium">Error: {error}</p>
+      </div>
+    );
 
-  if (!userProfile) return (
-    <div className="max-w-2xl mx-auto mt-8 p-6 bg-blue-50 rounded-lg border border-blue-200">
-      <p className="text-center text-[#133E87] font-medium">No user data found.</p>
-    </div>
-  );
+  if (!userProfile)
+    return (
+      <div className="max-w-2xl mx-auto mt-8 p-6 bg-blue-50 rounded-lg border border-blue-200">
+        <p className="text-center text-[#133E87] font-medium">
+          No user data found.
+        </p>
+      </div>
+    );
 
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200">
         <div className="bg-[#2557a7] px-6 py-4">
-          <h2 className=" text-2xl font-bold text-white flex justify-center ">User Profile</h2>
+          <h2 className=" text-2xl font-bold text-white flex justify-center ">
+            User Profile
+          </h2>
         </div>
 
         <div className="p-6">
           <div className="grid gap-6">
             {Object.entries(userProfile)
-              .filter(([key]) => key !== "_id" && key !== "__v" && key !== "notifications" && key!=="workexperinces")
+              .filter(
+                ([key]) =>
+                  key !== "_id" &&
+                  key !== "__v" &&
+                  key !== "notifications" &&
+                  key !== "workexperinces"
+              )
               .map(([key, value]) => (
-                <div key={key} className="border-b border-gray-200 last:border-0 pb-6 last:pb-0">
+                <div
+                  key={key}
+                  className="border-b border-gray-200 last:border-0 pb-6 last:pb-0"
+                >
                   <label className="block text-sm font-semibold text-gray-700 mb-2 capitalize">
                     {key.replace(/([A-Z])/g, " $1")}
                   </label>
@@ -137,44 +155,49 @@ const UserProfile = () => {
                           <span className="text-sm text-gray-700">No</span>
                         </label>
                       </div>
-                    ) : (
-                      Array.isArray(value) ? (
-                        <div className="space-y-2">
-                          <div className="flex flex-wrap gap-2">
-                            {value.map((skill, index) => (
-                              <Button key={index} skill={skill} isEditing={isEditing} onRemove={onRemove} />
-                            ))}
-                          </div>
-                          <input
-                            type="text"
-                            name={key}
-                            value={Array.isArray(value) ? value.join(", ") : value || ""}
-                            onChange={handleChange}
-                            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2557a7] focus:border-[#2557a7]"
-                          />
+                    ) : Array.isArray(value) ? (
+                      <div className="space-y-2">
+                        <div className="flex flex-wrap gap-2">
+                          {value.map((skill, index) => (
+                            <Button
+                              key={index}
+                              skill={skill}
+                              isEditing={isEditing}
+                              onRemove={onRemove}
+                            />
+                          ))}
                         </div>
-                      ) : (
                         <input
-                          type={key === "DOB" ? "date" : "text"}
+                          type="text"
                           name={key}
-                          value={value || ""}
+                          value={
+                            Array.isArray(value)
+                              ? value.join(", ")
+                              : value || ""
+                          }
                           onChange={handleChange}
                           className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2557a7] focus:border-[#2557a7]"
                         />
-                      )
-                    )
-                  ) : (
-                    Array.isArray(value) ? (
-                      <div className="flex flex-wrap gap-2">
-                        {value.map((skill, index) => (
-                          <Button key={index} skill={skill} />
-                        ))}
                       </div>
                     ) : (
-                      <p className="text-sm text-gray-700">
-                        {value === "N/A" ? "-" : value}
-                      </p>
+                      <input
+                        type={key === "DOB" ? "date" : "text"}
+                        name={key}
+                        value={value || ""}
+                        onChange={handleChange}
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2557a7] focus:border-[#2557a7]"
+                      />
                     )
+                  ) : Array.isArray(value) ? (
+                    <div className="flex flex-wrap gap-2">
+                      {value.map((skill, index) => (
+                        <Button key={index} skill={skill} />
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-700">
+                      {value === "N/A" ? "-" : value}
+                    </p>
                   )}
                 </div>
               ))}
@@ -192,8 +215,9 @@ const UserProfile = () => {
                 <button
                   onClick={saveData}
                   disabled={saving}
-                  className={`px-4 py-2 text-sm text-white rounded-md ${saving ? "bg-gray-400" : "bg-[#2557a7] hover:bg-[#1e4c9a]"
-                    } transition-colors duration-200`}
+                  className={`px-4 py-2 text-sm text-white rounded-md ${
+                    saving ? "bg-gray-400" : "bg-[#2557a7] hover:bg-[#1e4c9a]"
+                  } transition-colors duration-200`}
                 >
                   {saving ? "Saving..." : "Save"}
                 </button>

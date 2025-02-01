@@ -1,12 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { toast, Toaster } from 'react-hot-toast';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast, Toaster } from "react-hot-toast";
 import {
-  User, ChevronLeft, ChevronRight, MapPin, Briefcase,
-  IndianRupee, ExternalLink, Bookmark,
-  TrendingUp, Calendar, BookMarked
-} from 'lucide-react';
-import axios from 'axios';
+  User,
+  ChevronLeft,
+  ChevronRight,
+  MapPin,
+  Briefcase,
+  IndianRupee,
+  ExternalLink,
+  Bookmark,
+  TrendingUp,
+  Calendar,
+  BookMarked,
+} from "lucide-react";
+import axios from "axios";
 
 const UserPage = ({ jobs, loading }) => {
   const navigate = useNavigate();
@@ -14,16 +22,18 @@ const UserPage = ({ jobs, loading }) => {
   const [savedJobs, setSavedJobs] = useState([]);
   const [appliedJobs, setAppliedJobs] = useState([]);
   const [alljobs, setalljobs] = useState([]);
-  const username = localStorage.getItem('username').toUpperCase();
-  const [interviews, setInterviews] = useState(0)
+  const username = localStorage.getItem("username").toUpperCase();
+  const [interviews, setInterviews] = useState(0);
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
     try {
-      const username = localStorage.getItem('username');
-      const response = await axios.get(`/api/user/main/${username}`);
+      const username = localStorage.getItem("username");
+      const response = await axios.get(
+        `https://inheritance-project-4kr9.onrender.com/user/main/${username}`
+      );
       setSavedJobs(response.data.sjobsdetails || []);
       setalljobs(response.data.jobs);
       setInterviews(response.data.interviews);
@@ -36,7 +46,7 @@ const UserPage = ({ jobs, loading }) => {
     interviews: interviews,
     saved: (savedJobs && savedJobs.length) || 0, // Handles undefined or empty savedJobs
   };
-  
+
   const handlePrevious = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? alljobs.length - 3 : prevIndex - 3
@@ -55,34 +65,37 @@ const UserPage = ({ jobs, loading }) => {
 
   const handleUnsaveJob = async (jobid) => {
     try {
-      const username = localStorage.getItem('username');
-      const response = await axios.post('/api/user/unsave', {
-        jobid: jobid,
-        username: username
-      })
+      const username = localStorage.getItem("username");
+      const response = await axios.post(
+        "https://inheritance-project-4kr9.onrender.com/user/unsave",
+        {
+          jobid: jobid,
+          username: username,
+        }
+      );
       setSavedJobs(response.data.sjobsdetails);
       if (response.data.success) {
         toast("Bookmark removed", {
           style: {
-            backgroundColor: '#CBDCEB',
-            color: '#133E87',
-            border: '1px solid #133E87'
-          }
+            backgroundColor: "#CBDCEB",
+            color: "#133E87",
+            border: "1px solid #133E87",
+          },
         });
       }
     } catch (error) {
       toast.error("Bookmark cannot be removed", {
         style: {
-          backgroundColor: '#CBDCEB',
-          color: '#133E87',
-          border: '1px solid #133E87'
-        }
+          backgroundColor: "#CBDCEB",
+          color: "#133E87",
+          border: "1px solid #133E87",
+        },
       });
     }
   };
 
   const formatSalary = (salary) => {
-    if (!salary) return 'Not Disclosed';
+    if (!salary) return "Not Disclosed";
     const inLakhs = salary / 100000;
     return `${inLakhs.toFixed(2)} L/year`;
   };
@@ -94,7 +107,7 @@ const UserPage = ({ jobs, loading }) => {
         style={{
           backgroundImage: `linear-gradient(to right, #e5e7eb 1px, transparent 1px),
             linear-gradient(to bottom, #e5e7eb 1px, transparent 1px)`,
-          backgroundSize: '4rem 4rem'
+          backgroundSize: "4rem 4rem",
         }}
       >
         {/*  Section */}
@@ -123,7 +136,9 @@ const UserPage = ({ jobs, loading }) => {
                 </h3>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-2xl font-bold">{jobStats.applications}</span>
+                <span className="text-2xl font-bold">
+                  {jobStats.applications}
+                </span>
                 <TrendingUp className="text-green-500" size={24} />
               </div>
             </div>
@@ -134,7 +149,9 @@ const UserPage = ({ jobs, loading }) => {
                 </h3>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-2xl font-bold">{jobStats.interviews}</span>
+                <span className="text-2xl font-bold">
+                  {jobStats.interviews}
+                </span>
                 <Calendar className="text-[#133E87]" size={24} />
               </div>
             </div>
@@ -152,14 +169,21 @@ const UserPage = ({ jobs, loading }) => {
           </div>
           <div className="bg-white rounded-lg shadow-sm mb-6">
             <div className="p-4 border-b">
-              <h3 className="text-lg font-medium text-[#133E87] flex items-center gap-2">Saved Jobs <BookMarked size={18} /></h3>
+              <h3 className="text-lg font-medium text-[#133E87] flex items-center gap-2">
+                Saved Jobs <BookMarked size={18} />
+              </h3>
             </div>
             <div className="p-4">
               {savedJobs.length === 0 ? (
-                <p className='text-gray-500 text-center py-4'>No Saved Jobs Yet</p>
+                <p className="text-gray-500 text-center py-4">
+                  No Saved Jobs Yet
+                </p>
               ) : (
-                savedJobs.map(job => (
-                  <div key={job._id} className="flex items-center justify-between py-2 border-b last:border-0">
+                savedJobs.map((job) => (
+                  <div
+                    key={job._id}
+                    className="flex items-center justify-between py-2 border-b last:border-0"
+                  >
                     <div>
                       <h4 className="font-medium">{job.jobprofile}</h4>
                       <p className="text-sm text-gray-600">{job.company}</p>
@@ -175,21 +199,25 @@ const UserPage = ({ jobs, loading }) => {
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm text-gray-500">Saved on {job.savedDate}</span>
+                      <span className="text-sm text-gray-500">
+                        Saved on {job.savedDate}
+                      </span>
                       <button
                         className="px-3 py-1 text-sm rounded-md text-white bg-[#133E87] hover:bg-[#608BC1]"
                         onClick={() => handleUnsaveJob(job._id)}
                       >
-                        <Bookmark size={16} className='fill-current' />
+                        <Bookmark size={16} className="fill-current" />
                       </button>
                       <button
                         className="px-3 py-1 text-sm rounded-md text-white bg-[#133E87] hover:bg-[#608BC1]"
-                        onClick={() => handleApply(job._id)}>
+                        onClick={() => handleApply(job._id)}
+                      >
                         Apply
                       </button>
                     </div>
                   </div>
-                )))}
+                ))
+              )}
             </div>
           </div>
 
@@ -200,7 +228,7 @@ const UserPage = ({ jobs, loading }) => {
                 Latest Opportunities
               </h2>
               <button
-                onClick={() => navigate('/user/Jobs')}
+                onClick={() => navigate("/user/Jobs")}
                 className="text-sm text-[#133E87] hover:underline flex items-center gap-1"
               >
                 View All
@@ -239,7 +267,9 @@ const UserPage = ({ jobs, loading }) => {
                     >
                       <div className=" mr-3 pr-12 bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-all ease-in-out duration-300">
                         <div className="flex flex-col gap-2">
-                          <h4 className="text-lg font-semibold text-[#133E87]">{job.jobprofile}</h4>
+                          <h4 className="text-lg font-semibold text-[#133E87]">
+                            {job.jobprofile}
+                          </h4>
                           <p className="text-sm text-gray-600">{job.company}</p>
                           <div className="flex gap-4 mt-1 text-sm text-gray-500">
                             <span className="flex items-center gap-1">
@@ -269,7 +299,6 @@ const UserPage = ({ jobs, loading }) => {
                       </div>
                     </div>
                   ))}
-
                 </div>
               </div>
             </div>

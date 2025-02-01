@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { FaEdit, FaUser } from 'react-icons/fa';
+import { FaEdit, FaUser } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 
 const ProfilePic = () => {
@@ -14,7 +14,9 @@ const ProfilePic = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`/api/userassets/${username}`);
+        const response = await axios.get(
+          `https://inheritance-project-4kr9.onrender.com/userassets/${username}`
+        );
         setImg(response.data.profilepicurl);
       } catch (error) {
         setError(error.message || "Failed to fetch data.");
@@ -37,15 +39,15 @@ const ProfilePic = () => {
       const formData = new FormData();
       formData.append("profilepic", img);
       formData.append("username", username);
-      
+
       try {
         const response = await axios.post(
-          `/api/saveprofilepic/${username}`,
+          `https://inheritance-project-4kr9.onrender.com/saveprofilepic/${username}`,
           formData,
           {
             headers: {
               "Content-Type": "multipart/form-data",
-            }
+            },
           }
         );
         setImg(response.data.url);
@@ -73,13 +75,17 @@ const ProfilePic = () => {
               </div>
             ) : (
               <img
-                src={typeof img === 'string' ? img : 'https://via.placeholder.com/200'}
+                src={
+                  typeof img === "string"
+                    ? img
+                    : "https://via.placeholder.com/200"
+                }
                 alt="Profile"
                 className="w-full h-full object-cover"
               />
             )}
           </div>
-          
+
           {!editing && (
             <button
               onClick={() => setEditing(true)}
@@ -111,13 +117,14 @@ const ProfilePic = () => {
                 disabled={loading}
                 className="flex-1 bg-[#133E87] text-white py-2 px-4 rounded-lg hover:bg-[#608BC1] transition-all duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed font-medium"
               >
-                {loading ? 
+                {loading ? (
                   <span className="flex items-center justify-center">
                     <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent mr-2"></div>
                     Uploading...
-                  </span> : 
-                  'Upload'
-                }
+                  </span>
+                ) : (
+                  "Upload"
+                )}
               </button>
               <button
                 onClick={() => setEditing(false)}

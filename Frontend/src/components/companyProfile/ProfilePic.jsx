@@ -1,8 +1,6 @@
-
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { FaEdit, FaUser } from 'react-icons/fa';
+import { FaEdit, FaUser } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 
 const ProfilePic = () => {
@@ -16,7 +14,9 @@ const ProfilePic = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`/api/userassets/${username}`);
+        const response = await axios.get(
+          `https://inheritance-project-4kr9.onrender.com/userassets/${username}`
+        );
         setImg(response.data.profilepicurl);
       } catch (error) {
         setError(error.message || "Failed to fetch data.");
@@ -42,7 +42,7 @@ const ProfilePic = () => {
 
       try {
         const response = await axios.post(
-          `/api/saveprofilepic/${username}`,
+          `https://inheritance-project-4kr9.onrender.com/saveprofilepic/${username}`,
           formData,
           {
             headers: {
@@ -75,7 +75,11 @@ const ProfilePic = () => {
               </div>
             ) : (
               <img
-                src={typeof img === 'string' ? img : 'https://via.placeholder.com/200'}
+                src={
+                  typeof img === "string"
+                    ? img
+                    : "https://via.placeholder.com/200"
+                }
                 alt="Profile"
                 className="w-full h-full object-cover"
               />
@@ -119,7 +123,7 @@ const ProfilePic = () => {
                     Uploading...
                   </span>
                 ) : (
-                  'Upload'
+                  "Upload"
                 )}
               </button>
               <button
