@@ -16,11 +16,15 @@ const JSCard = ({
 }) => {
   const displayedSkills = skills.slice(0, 4);
   const [shortlist, setShortlist] = useState(isshortlisted);
+
+  
+
+
   const candidateImages = [
-    "public/images/person.png",
-    "public/images/person1.png",
-    "public/images/person2.png",
-    "public/images/person3.png",
+    "/images/person.png",
+    "/images/person1.png",
+    "/images/person2.png",
+    "/images/person3.png",
   ];
   const randomImage =
     candidateImages[parseInt(username.charCodeAt(0)) % candidateImages.length];
