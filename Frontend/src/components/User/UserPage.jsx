@@ -284,7 +284,7 @@ const UserPage = ({ jobs, loading }) => {
                         </div>
                         <div className="flex justify-between items-center mt-4">
                           <button
-                            onClick={() => handleApply(job.companyusername)}
+                            onClick={() => handleApply(job._id)}
                             className="px-4 py-2 text-sm rounded-md text-white bg-[#133E87] hover:bg-[#608BC1] transition-all duration-200"
                           >
                             Apply
