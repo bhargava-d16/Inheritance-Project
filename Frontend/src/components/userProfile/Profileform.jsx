@@ -10,6 +10,7 @@ const UserProfile = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
   const { username } = useParams();
+  const x=localStorage.getItem("User");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -225,7 +226,7 @@ const UserProfile = () => {
             ) : (
               <button
                 onClick={() => setIsEditing(true)}
-                className="px-4 py-2 text-sm text-white bg-[#2557a7] rounded-md hover:bg-[#1e4c9a] transition-colors duration-200"
+                className= {x==="Candidate"?`disabled`:`px-4 py-2 text-sm text-white bg-[#2557a7] rounded-md hover:bg-[#1e4c9a] transition-colors duration-200`}
               >
                 Edit Profile
               </button>
