@@ -73,44 +73,44 @@ const startServer = async () => {
 };
 startServer();
 
-app.post("/EDashboard/myjobs/:id", shortlistCandidate);
-app.get("/EDashboard/myjobs/:id", sendjobdata);
-app.get("/EDashboard/myjobs", sendjobposts);
-app.get("/EDashboard/search", searchcandidates);
-app.post("/EDashboard", reachoutcandidates);
-app.get("/EDashboard", sendJSdata);
-app.post("/EDashboard/jobposting", PostJob);
-app.get("/user/:username", getUserProfile);
-app.put("/user/:username", saveUserProfile);
-app.get("/company/:username", getCompanyProfile);
-app.put("/company/:username", saveCompanyProfile);
-app.get("/jobs", getJobs);
-app.get("/jobs/:jobid", getCompanyDetails);
-app.put("/jobs/:companyusername", putJobApplication);
-app.get("/user",getUser);
-app.post("/register/user", registeruser) 
-app.post("/login/company", loginemp)
-app.post("/login/user" ,loginuser) 
-app.post("/register/company", registeremp)  
-app.put('/user',markasReadfunc)                    
-app.get("/userassets/:username", getUserAssets);
+app.post("/api/EDashboard/myjobs/:id", shortlistCandidate);
+app.get("/api/EDashboard/myjobs/:id", sendjobdata);
+app.get("/api/EDashboard/myjobs", sendjobposts);
+app.get("/api/EDashboard/search", searchcandidates);
+app.post("/api/EDashboard", reachoutcandidates);
+app.get("/api/EDashboard", sendJSdata);
+app.post("/api/EDashboard/jobposting", PostJob);
+app.get("/api/user/:username", getUserProfile);
+app.put("/api/user/:username", saveUserProfile);
+app.get("/api/company/:username", getCompanyProfile);
+app.put("/api/company/:username", saveCompanyProfile);
+app.get("/api/jobs", getJobs);
+app.get("/api/jobs/:jobid", getCompanyDetails);
+app.put("/api/jobs/:companyusername", putJobApplication);
+app.get("/api/user",getUser);
+app.post("/api/register/user", registeruser) 
+app.post("/api/login/company", loginemp)
+app.post("/api/login/user" ,loginuser) 
+app.post("/api/register/company", registeremp)  
+app.put('/api/user',markasReadfunc)                    
+app.get("/api/userassets/:username", getUserAssets);
 app.post(
-  "/saveprofilepic/:username",
+  "/api/saveprofilepic/:username",
   upload.single("profilepic"),
   saveNewProfilePic
 );
 app.post(
-  "/savecompanypic/:username",
+  "/api/savecompanypic/:username",
   upload.single("companypic"),
   saveNewCompanyPic
 );
-app.post('/EDashboard/myjobs/:id/sendinvite',sendinvite)
-app.get("/scheduled-meets/:username", scheduledmeets);
+app.post('/api/EDashboard/myjobs/:id/sendinvite',sendinvite)
+app.get("/api/scheduled-meets/:username", scheduledmeets);
 
-app.get('/user/main/:username',getsavedjob)
-app.post('/user/jobs',savedJobs)
+app.get('/api/user/main/:username',getsavedjob)
+app.post('/api/user/jobs',savedJobs)
 
-app.post('/user/unsave',unsavejob)
+app.post('/api/user/unsave',unsavejob)
 
 
 
