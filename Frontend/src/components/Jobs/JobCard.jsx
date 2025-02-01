@@ -30,7 +30,7 @@ const JobCard = ({ job, onApply,appliedJobs }) => {
     setIsBookmarked(!isBookmarked);
     console.log(jobid)
     const username=localStorage.getItem('username')
-    const response=await axios.post("http://localhost:8080/user/jobs",{
+    const response=await axios.post("/api/user/jobs",{
       jobid,
       username
     })

@@ -15,7 +15,7 @@ const UserProfile = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:8080/user/${username}`);
+        const response = await axios.get(`/api/user/${username}`);
         setUserProfile(response.data);
       } catch (error) {
         setError(error.message || "Failed to fetch data.");
@@ -55,7 +55,7 @@ const UserProfile = () => {
     try {
       setSaving(true);
       await axios.put(
-        `http://localhost:8080/user/${username}`,
+        `/api/user/${username}`,
         JSON.stringify(newUserProfile),
         { headers: { "Content-Type": "application/json" } }
       );

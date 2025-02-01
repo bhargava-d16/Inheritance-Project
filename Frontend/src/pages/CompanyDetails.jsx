@@ -57,7 +57,7 @@ const CompanyDetails = () => {
   const fetchJobDetails = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:8080/jobs/${jobid}`);
+      const response = await fetch(`/api/jobs/${jobid}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -112,7 +112,7 @@ const CompanyDetails = () => {
     console.log(newJobDetails)
     const companyusername=jobDetails.companyusername
     try {
-      await axios.put(`http://localhost:8080/jobs/${companyusername}`, newJobDetails);
+      await axios.put(`/api/jobs/${companyusername}`, newJobDetails);
       toast.success('Application submitted successfully!');
       navigate('/user/jobs');
     } catch (error) {

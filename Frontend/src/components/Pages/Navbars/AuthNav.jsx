@@ -6,16 +6,16 @@ const AuthNav = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Mock notifications data
-  const handleNavigation = (path) => {
-    setIsMenuOpen(false);
-    setIsLoading(true);
-
-    setTimeout(() => {
-      navigate(path);
-      setIsLoading(false);
-    }, 300);
-  };
+  // // Mock notifications data
+  // const handleNavigation = (path) => {
+  //   setIsMenuOpen(false);
+  //   setIsLoading(true);
+  //   navigate(path);
+  //   // setTimeout(() => {
+  //   //   navigate(path);
+  //   //   setIsLoading(false);
+  //   // }, 300);
+  // };
 
   return (
     <>
@@ -42,7 +42,7 @@ const AuthNav = () => {
                 JobPortal
               </span>
               <button
-                onClick={() => handleNavigation('/')}
+                onClick={() => navigate('/')}
                 className="block px-4 py-2 text-sm  text-white hover:bg-transparent underline-offset-4 hover:underline"
               >
                 Home

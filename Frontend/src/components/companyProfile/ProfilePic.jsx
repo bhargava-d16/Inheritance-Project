@@ -16,7 +16,7 @@ const ProfilePic = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:8080/userassets/${username}`);
+        const response = await axios.get(`/api/userassets/${username}`);
         setImg(response.data.profilepicurl);
       } catch (error) {
         setError(error.message || "Failed to fetch data.");
@@ -42,7 +42,7 @@ const ProfilePic = () => {
 
       try {
         const response = await axios.post(
-          `http://localhost:8080/saveprofilepic/${username}`,
+          `/api/saveprofilepic/${username}`,
           formData,
           {
             headers: {

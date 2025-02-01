@@ -15,7 +15,7 @@ const ProfileForm = ( ) => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:8080/company/${username}`);
+        const response = await axios.get(`/api/company/${username}`);
         setCompanyProfile(response.data);
       } catch (error) {
         setError(error.message || "Failed to fetch data.");
@@ -42,7 +42,7 @@ const ProfileForm = ( ) => {
 
     try {
       setSaving(true);
-      await axios.put(`http://localhost:8080/company/${username}`, companyProfile, {
+      await axios.put(`/api/company/${username}`, companyProfile, {
         headers: { "Content-Type": "application/json" },
       });
 

@@ -32,7 +32,7 @@ const ENavbar = () => {
         <span>&#9776;</span>
       </div>
       <div className={`enavbarlinks ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-        <Link to="/EDashboard" className="ml-3">Job Apply</Link>
+        <Link to="/EDashboard" className="ml-3">Job Portal</Link>
         <Link className="flex gap-2 items-center justify-center" to="/EDashboard/jobposting">
           <MdWorkOutline /> Job Posting
         </Link>
